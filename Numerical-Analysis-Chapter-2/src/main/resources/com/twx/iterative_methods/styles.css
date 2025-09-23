@@ -1,0 +1,77 @@
+/* styles.css */
+
+/* 根节点，定义全局样式 */
+.root {
+    -fx-font-family: "Microsoft YaHei", sans-serif; /* 使用更美观的字体 */
+    -fx-background-color: #F4F4F9; /* 淡雅的背景色 */
+}
+
+/* 按钮样式 */
+.button {
+    -fx-background-color: #5865F2; /* 主题色 - 类似Discord的蓝色 */
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8px; /* 圆角 */
+    -fx-padding: 8px 16px;
+}
+
+.button:hover {
+    -fx-background-color: #4752C4; /* 悬停时颜色变深 */
+    -fx-cursor: hand;
+}
+
+/* 标签样式 */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2E3338; /* 深灰色文字 */
+}
+
+/* 文本输入框样式 */
+.text-field {
+    -fx-background-radius: 8px;
+    -fx-border-color: #B9B9C0;
+    -fx-border-radius: 8px;
+    -fx-font-size: 14px;
+}
+
+.text-field:focused {
+    -fx-border-color: #5865F2; /* 聚焦时边框变为主题色 */
+    -fx-border-width: 2px;
+}
+
+/* 下拉菜单样式 */
+.combo-box {
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+    -fx-border-color: #B9B9C0;
+    -fx-border-radius: 8px;
+}
+
+.combo-box .list-cell {
+    -fx-font-size: 14px;
+}
+
+.header-label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2E3338;
+}
+
+.sub-header-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2E3338;
+}
+
+.text-area {
+    -fx-background-color: #FFFFFF;
+    -fx-font-family: "Consolas", "Monospaced", sans-serif; /* 等宽字体，适合显示数据 */
+    -fx-font-size: 13px;
+    -fx-border-color: #B9B9C0;
+    -fx-border-radius: 8px;
+}
+
+.text-area .content {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 8px;
+}
