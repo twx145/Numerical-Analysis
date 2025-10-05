@@ -1,77 +1,65 @@
-/* styles.css */
+/* styles.css - Theme: Nordic Light */
 
-/* 根节点，定义全局样式 */
 .root {
-    -fx-font-family: "Microsoft YaHei", sans-serif; /* 使用更美观的字体 */
-    -fx-background-color: #F4F4F9; /* 淡雅的背景色 */
+    -fx-primary-color: #5E81AC;
+    -fx-primary-hover-color: #4C6A8D;
+    -fx-background-light: #ECEFF4;
+    -fx-background-content: #FFFFFF;
+    -fx-text-dark: #2E3440;
+    -fx-text-light: #FFFFFF;
+    -fx-border-light: #D8DEE9;
+    -fx-border-focused: #5E81AC;
+    -fx-font-family-ui: "Microsoft YaHei", "Segoe UI", sans-serif;
+    -fx-font-family-data: "Consolas", "Monaco", "Monospaced";
 }
 
-/* 按钮样式 */
+.root { -fx-background-color: -fx-background-light; }
+
+.control-panel {
+    -fx-background-color: -fx-background-content;
+    -fx-padding: 20px 30px;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: -fx-border-light;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);
+}
+
 .button {
-    -fx-background-color: #5865F2; /* 主题色 - 类似Discord的蓝色 */
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-background-radius: 8px; /* 圆角 */
-    -fx-padding: 8px 16px;
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: -fx-text-light;
+    -fx-font-family: -fx-font-family-ui; -fx-font-weight: bold; -fx-font-size: 14px;
+    -fx-background-radius: 8px; -fx-padding: 8px 18px; -fx-cursor: hand;
+    -fx-transition: -fx-background-color 0.2s ease-in-out;
 }
+.button:hover { -fx-background-color: -fx-primary-hover-color; }
+.button:disabled { -fx-background-color: #A0B3C7; -fx-opacity: 0.8; -fx-cursor: default; }
 
-.button:hover {
-    -fx-background-color: #4752C4; /* 悬停时颜色变深 */
-    -fx-cursor: hand;
-}
+.label { -fx-font-family: -fx-font-family-ui; -fx-font-size: 14px; -fx-text-fill: -fx-text-dark; }
 
-/* 标签样式 */
-.label {
-    -fx-font-size: 14px;
-    -fx-text-fill: #2E3338; /* 深灰色文字 */
+.text-field, .combo-box {
+    -fx-background-color: -fx-background-content;
+    -fx-text-fill: -fx-text-dark;
+    -fx-prompt-text-fill: #9099A9;
+    -fx-font-family: -fx-font-family-ui; -fx-font-size: 14px;
+    -fx-background-radius: 8px; -fx-border-color: -fx-border-light;
+    -fx-border-radius: 8px; -fx-border-width: 1px;
+    -fx-transition: -fx-border-color 0.2s ease-in-out;
 }
+.text-field:focused, .combo-box:focused { -fx-border-color: -fx-border-focused; -fx-border-width: 2px; }
 
-/* 文本输入框样式 */
-.text-field {
-    -fx-background-radius: 8px;
-    -fx-border-color: #B9B9C0;
-    -fx-border-radius: 8px;
-    -fx-font-size: 14px;
-}
+.combo-box .arrow-button .arrow { -fx-background-color: -fx-primary-color; }
+.combo-box .list-cell { -fx-font-family: -fx-font-family-ui; -fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: -fx-text-dark; }
+.combo-box-popup .list-view { -fx-background-color: -fx-background-content; -fx-border-color: -fx-border-light; }
+.combo-box .list-cell:hover { -fx-background-color: -fx-primary-hover-color; -fx-text-fill: -fx-text-light; }
 
-.text-field:focused {
-    -fx-border-color: #5865F2; /* 聚焦时边框变为主题色 */
-    -fx-border-width: 2px;
-}
+.text-area { -fx-background-color: -fx-background-content; -fx-font-family: -fx-font-family-data; -fx-font-size: 13px; -fx-border-color: -fx-border-light; -fx-border-radius: 8px; -fx-text-fill: -fx-text-dark; }
+.text-area .content { -fx-background-color: -fx-background-content; -fx-background-radius: 8px; }
 
-/* 下拉菜单样式 */
-.combo-box {
-    -fx-background-color: white;
-    -fx-background-radius: 8px;
-    -fx-border-color: #B9B9C0;
-    -fx-border-radius: 8px;
-}
+.scroll-bar:vertical .thumb, .scroll-bar:horizontal .thumb { -fx-background-color: #D8DEE9; -fx-background-radius: 4px; }
+.scroll-bar:vertical .thumb:hover, .scroll-bar:horizontal .thumb:hover { -fx-background-color: #C8CDD6; }
+.scroll-bar .track { -fx-background-color: transparent; }
 
-.combo-box .list-cell {
-    -fx-font-size: 14px;
-}
+.split-pane-divider { -fx-background-color: #E5E9F0; -fx-padding: 0 1px 0 1px; }
+.split-pane-divider:hover { -fx-background-color: #D8DEE9; }
 
-.header-label {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2E3338;
-}
-
-.sub-header-label {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #2E3338;
-}
-
-.text-area {
-    -fx-background-color: #FFFFFF;
-    -fx-font-family: "Consolas", "Monospaced", sans-serif; /* 等宽字体，适合显示数据 */
-    -fx-font-size: 13px;
-    -fx-border-color: #B9B9C0;
-    -fx-border-radius: 8px;
-}
-
-.text-area .content {
-    -fx-background-color: #FFFFFF;
-    -fx-background-radius: 8px;
-}
+.header-label { -fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: -fx-text-dark; }
+.sub-header-label { -fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: -fx-text-dark; }

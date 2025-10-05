@@ -1,39 +1,40 @@
 package com.twx.iterative_methods.controller;
 
-import com.twx.iterative_methods.model.*;
+import com.twx.iterative_methods.model.IterationState;
+import com.twx.iterative_methods.model.IterativeMethod;
+import com.twx.iterative_methods.model.MethodIterator;
 import com.twx.iterative_methods.model.impl.*;
 import com.twx.iterative_methods.view.OneDimPlot;
 import com.twx.iterative_methods.view.TwoDimPlot;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 public class MainController {
 
-    // FXML Controls
-    @FXML private TextField fField, gField, iterationsField, initialValueField, secondInitialValueField;
+    public VBox plotContainer;
+    // --- FXML Controls ---
+    @FXML private TextField fField, gField, initialValueField, secondInitialValueField;
     @FXML private Label gLabel;
     @FXML private ComboBox<String> methodComboBox;
-    @FXML private Button startButton, clearButton;
-    @FXML private TwoDimPlot twoDimPlot; // This is now the Pane that manages its own layers
+    @FXML private Button resetButton, nextStepButton, clearButton;
+    @FXML private TwoDimPlot twoDimPlot;
     @FXML private OneDimPlot oneDimPlot;
     @FXML private HBox x1Container;
     @FXML private TextArea logArea;
 
-    // Member Variables
+    // --- 状态管理变量 ---
     private Equation currentEquation;
-    private String currentFString = "";
-    private Timeline iterationTimeline;
+    private MethodIterator currentIterator;
+    private final List<IterationState> iterationHistory = new ArrayList<>();
     private final IterativeMethod[] methods = {
             new SimpleIterationMethod(), new NewtonMethod(), new SteffensenMethod(),
             new SimplifiedNewtonMethod(), new ModifiedSecantMethod(), new DampedNewtonMethod(),
@@ -44,164 +45,235 @@ public class MainController {
 
     @FXML
     public void initialize() {
-        // --- THIS IS THE CORRECTED SECTION ---
-        // The FXML loader has already placed the TwoDimPlot pane correctly.
-        // We no longer need to manually create a StackPane or re-parent anything.
-        // The structure from FXML is: VBox -> TwoDimPlot (Pane) -> [Canvas layers]
-
-        // Initialize UI controls
         methodComboBox.setItems(FXCollections.observableArrayList(
                 Stream.of(methods).map(IterativeMethod::getName).toList()
         ));
         methodComboBox.getSelectionModel().select(1); // Default to Newton's method
 
-        // Add listener for smart UI changes
         methodComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> updateUiForSelectedMethod());
-        updateUiForSelectedMethod(); // Initial call to set the UI correctly
+        updateUiForSelectedMethod();
 
-        // Set button actions
-        startButton.setOnAction(e -> startAnimation());
-        clearButton.setOnAction(e -> {
-            if (iterationTimeline != null) iterationTimeline.stop();
-            twoDimPlot.clearIterations();
-            oneDimPlot.clearMappings();
-            logArea.clear();
-        });
-
-        // Perform initial draw
-        twoDimPlot.drawAllLayers(null, null);
-        oneDimPlot.drawBase();
+        resetButton.setOnAction(e -> initializeIteration());
+        nextStepButton.setOnAction(e -> performNextStep());
+        clearButton.setOnAction(e -> clearAll());
     }
 
-    private void startAnimation() {
-        if (iterationTimeline != null) iterationTimeline.stop();
-        twoDimPlot.clearIterations();
-        oneDimPlot.clearMappings();
-        logArea.clear();
+    /**
+     * "开始/重置" 按钮的事件处理程序。
+     * 验证输入、创建迭代器、将数据传递给视图，并执行第0步。
+     */
+    private void initializeIteration() {
+        try {
+            // 1. 清理工作
+            clearAll();
+            iterationHistory.clear();
 
-        Equation newEquation;
-        int iterations;
-        double x0;
+            // 2. 解析和验证输入
+            String gStr = methodComboBox.getSelectionModel().getSelectedItem().equals(simpleIterationName) ? gField.getText() : "";
+            currentEquation = new Equation(fField.getText(), gStr);
+            double x0 = Double.parseDouble(initialValueField.getText());
+
+            // 3. 将绘图所需数据传递给View
+            IterativeMethod selectedMethod = methods[methodComboBox.getSelectionModel().getSelectedIndex()];
+            twoDimPlot.setPlotData(currentEquation, selectedMethod, iterationHistory);
+            oneDimPlot.setPlotData(iterationHistory, getColorForMethod(selectedMethod));
+
+            // 4. 创建迭代器
+            if (selectedMethod.getName().equals(secantMethodName)) {
+                double x1 = Double.parseDouble(secondInitialValueField.getText());
+                currentIterator = selectedMethod.createIterator(currentEquation, x0, x1);
+            } else {
+                currentIterator = selectedMethod.createIterator(currentEquation, x0);
+            }
+
+            // 5. 执行并记录第0步 (初始状态)
+            if (currentIterator.hasNext()) {
+                IterationState initialState = currentIterator.next();
+                iterationHistory.add(initialState);
+                logInitialState(initialState);
+            } else {
+                showError("Initialization Error", "Could not create iterator. Check function and initial value.");
+                return;
+            }
+
+            // 6. 准备UI
+            // 视图会根据新数据自动重绘，不需要手动调用 drawBase
+            drawFunctionWithInitialBounds(x0);
+            nextStepButton.setDisable(false);
+
+        } catch (Exception e) {
+            showError("Input Invalid", "Please check function expressions or parameters.\nError: " + e.getMessage());
+            nextStepButton.setDisable(true);
+        }
+    }
+
+    /**
+     * "下一步" 按钮的事件处理程序。
+     * 执行一次迭代，更新日志，并触发两个视图的动画。
+     */
+    private void performNextStep() {
+        if (currentIterator == null || !currentIterator.hasNext()) {
+            nextStepButton.setDisable(true);
+            return;
+        }
+
+        IterationState newState = currentIterator.next();
+        iterationHistory.add(newState);
+        logIterationStep(newState);
+
+        // [关键修改] 获取当前选择的方法，并将其传递给聚焦逻辑
         IterativeMethod selectedMethod = methods[methodComboBox.getSelectionModel().getSelectedIndex()];
 
+        double[] newBounds2D = calculateDynamicBounds2D(newState, selectedMethod);
+        twoDimPlot.animateToNewRange(newBounds2D[0], newBounds2D[1], newBounds2D[2], newBounds2D[3],
+                currentEquation.getF(), currentEquation.getG());
+
+        double[] newBounds1D = calculateDynamicBounds1D(newState);
+        oneDimPlot.animateToNewRange(newBounds1D[0], newBounds1D[1]);
+
+        if (!currentIterator.hasNext() || Math.abs(newState.fx_k()) < 1e-12 || newState.error_abs() < 1e-12) {
+            nextStepButton.setDisable(true);
+        }
+    }
+
+    /**
+     * 清理所有绘图、日志和状态。
+     */
+    private void clearAll() {
+        currentIterator = null;
+        iterationHistory.clear();
+
+        if (twoDimPlot != null) {
+            twoDimPlot.setPlotData(null, null, null);
+        }
+        if (oneDimPlot != null) {
+            // 传递一个空列表来清空
+            oneDimPlot.setPlotData(Collections.emptyList(), Color.BLACK);
+        }
+        if (logArea != null) {
+            logArea.clear();
+        }
+        if (nextStepButton != null) {
+            nextStepButton.setDisable(true);
+        }
+    }
+
+    // --- 日志记录辅助方法 ---
+
+    private void logInitialState(IterationState state) {
+        logArea.setText(String.format("%-4s | %-18s | %-18s | %-18s | %-18s\n",
+                "k", "x_k", "f(x_k)", "|x_k - x_{k-1}|", "Ratio"));
+        logArea.appendText("-".repeat(85) + "\n");
+        logArea.appendText(String.format("%-4d | %-18.12f | %-18.12f | %-18s | %-18s\n",
+                state.k(), state.x_k(), state.fx_k(), "N/A", "N/A"));
+    }
+
+    private void logIterationStep(IterationState state) {
+        logArea.appendText(String.format("%-4d | %-18.12f | %-18.12f | %-18.12e | %-18.12f\n",
+                state.k(), state.x_k(), state.fx_k(), state.error_abs(), state.error_ratio()));
+    }
+
+    // --- 绘图与动画辅助方法 ---
+
+    private void drawFunctionWithInitialBounds(double x0) {
+        double range = 5.0;
+        double y_at_x0;
         try {
-            String gStr = selectedMethod.getName().equals(simpleIterationName) ? gField.getText() : "";
-            newEquation = new Equation(fField.getText(), gStr);
-            iterations = Integer.parseInt(iterationsField.getText());
-            x0 = Double.parseDouble(initialValueField.getText());
+            y_at_x0 = currentEquation.getF().apply(x0);
         } catch (Exception e) {
-            showError("Input Invalid", "Please check the function expressions or parameters.\nError: " + e.getMessage());
-            return;
+            y_at_x0 = 0.0; // 如果初始点函数值无效，则以0为中心
         }
 
-        List<Double> sequence = generateSequence(selectedMethod, newEquation, x0, iterations);
-        if (sequence.size() < 2) {
-            showError("Calculation Error", "Could not generate iteration sequence. Please check initial values and functions.");
-            return;
-        }
-
-        boolean functionChanged = !fField.getText().equals(currentFString);
-        double[] newBounds = calculateAxisBounds(newEquation, sequence);
-        boolean rangeChanged = hasRangeChangedSignificantly(newBounds);
-
-        if (functionChanged || rangeChanged) {
-            currentEquation = newEquation;
-            currentFString = fField.getText();
-            oneDimPlot.animateAndDrawBase();
-            twoDimPlot.animateToNewRange(newBounds[0], newBounds[1], newBounds[2], newBounds[3],
-                    currentEquation.getF(), currentEquation.getG(),
-                    () -> startIterationAnimation(sequence, currentEquation, selectedMethod));
-        } else {
-            startIterationAnimation(sequence, currentEquation, selectedMethod);
-        }
+        twoDimPlot.animateToNewRange(x0 - range/2, x0 + range/2, y_at_x0 - range/2, y_at_x0 + range/2,
+                currentEquation.getF(), currentEquation.getG());
     }
 
-    private void startIterationAnimation(List<Double> sequence, Equation equation, IterativeMethod method) {
-        logArea.appendText(String.format("%-4s | %-22s | %-22s\n", "k", "x_k", "f(x_k)"));
-        logArea.appendText("-".repeat(52) + "\n");
-
-        iterationTimeline = new Timeline();
-        for (int i = 0; i < sequence.size() - 1; i++) {
-            final int step = i;
-            KeyFrame kf = new KeyFrame(Duration.seconds(step * 0.8), e -> {
-                double x_n = sequence.get(step);
-                double x_n1 = sequence.get(step + 1);
-
-                double fx = equation.getF().apply(x_n);
-                logArea.appendText(String.format("%-4d | %-22.15f | %-22.15f\n", step, x_n, fx));
-
-                method.draw2DStep(twoDimPlot.getIterationContext(), equation, x_n, x_n1, twoDimPlot);
-                oneDimPlot.drawMapping(x_n, x_n1, getColorForMethod(method));
-            });
-            iterationTimeline.getKeyFrames().add(kf);
-        }
-
-        int lastStep = sequence.size() - 1;
-        iterationTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(lastStep * 0.8), e -> {
-            double last_x = sequence.get(lastStep);
-            double last_fx = equation.getF().apply(last_x);
-            logArea.appendText(String.format("%-4d | %-22.15f | %-22.15f\n", lastStep, last_x, last_fx));
-        }));
-
-        iterationTimeline.play();
-    }
-
-    // --- Helper Methods (unchanged from the fixed version) ---
-
-    private double[] calculateAxisBounds(Equation eq, List<Double> sequence) {
-        double minX = sequence.stream().min(Double::compare).orElse(0.0);
-        double maxX = sequence.stream().max(Double::compare).orElse(1.0);
-        double paddingX = (maxX - minX) * 0.2;
-        paddingX = Math.max(paddingX, 1.0);
-
+    /**
+     * [关键修改] 此方法现在接受一个 IterativeMethod 参数，并根据方法类型选择不同的聚焦策略。
+     * @param state  当前的迭代状态
+     * @param method 当前使用的迭代方法
+     * @return 一个包含 [minX, maxX, minY, maxY] 的数组
+     */
+    private double[] calculateDynamicBounds2D(IterationState state, IterativeMethod method) {
+        // --- 1. 计算X轴范围 (所有方法通用) ---
+        double x1 = state.x_k_minus_1();
+        double x2 = state.x_k();
+        double minX = Math.min(x1, x2);
+        double maxX = Math.max(x1, x2);
+        double paddingX = Math.max((maxX - minX) * 0.5, 0.01);
         double finalMinX = minX - paddingX;
         double finalMaxX = maxX + paddingX;
 
-        double minY = Double.POSITIVE_INFINITY;
-        double maxY = Double.NEGATIVE_INFINITY;
+        // --- 2. 根据方法类型计算Y轴范围 ---
+        double minY, maxY;
 
-        int samples = 200;
-        for (int i = 0; i <= samples; i++) {
-            double x = finalMinX + i * (finalMaxX - finalMinX) / samples;
-            try {
-                double valF = eq.getF().apply(x);
-                if (Double.isFinite(valF)) {
-                    if (valF < minY) minY = valF;
-                    if (valF > maxY) maxY = valF;
-                }
-                double valG = eq.getG().apply(x);
-                if (Double.isFinite(valG)) {
-                    if (valG < minY) minY = valG;
-                    if (valG > maxY) maxY = valG;
-                }
-            } catch (Exception ignored) {}
+        if (method instanceof SimpleIterationMethod) {
+            // --- 策略 A: 针对普通迭代法 ---
+            // 目标是聚焦于 y=g(x) 和 y=x 的交点
+            minY = Double.POSITIVE_INFINITY;
+            maxY = Double.NEGATIVE_INFINITY;
+
+            // 在X范围内采样 g(x) 函数以找到其局部极值
+            int samples = 100;
+            for (int i = 0; i <= samples; i++) {
+                double x = finalMinX + i * (finalMaxX - finalMinX) / samples;
+                try {
+                    double valG = currentEquation.getG().apply(x);
+                    if (Double.isFinite(valG)) {
+                        minY = Math.min(minY, valG);
+                        maxY = Math.max(maxY, valG);
+                    }
+                } catch (Exception ignored) {}
+            }
+
+            // 确保 y=x 这条线在视图范围内
+            minY = Math.min(minY, finalMinX);
+            maxY = Math.max(maxY, finalMaxX);
+
+        } else {
+            // --- 策略 B: 针对所有其他求根方法 (牛顿法等) ---
+            // 目标是聚焦于 f(x) 和 x轴 (y=0) 的交点
+            minY = Double.POSITIVE_INFINITY;
+            maxY = Double.NEGATIVE_INFINITY;
+
+            // 在X范围内采样 f(x) 函数
+            int samples = 100;
+            for (int i = 0; i <= samples; i++) {
+                double x = finalMinX + i * (finalMaxX - finalMinX) / samples;
+                try {
+                    double valF = currentEquation.getF().apply(x);
+                    if (Double.isFinite(valF)) {
+                        minY = Math.min(minY, valF);
+                        maxY = Math.max(maxY, valF);
+                    }
+                } catch (Exception ignored) {}
+            }
+
+            // 确保 x轴 (y=0) 在视图范围内
+            minY = Math.min(minY, 0);
+            maxY = Math.max(maxY, 0);
         }
 
-        minY = Math.min(minY, finalMinX);
-        maxY = Math.max(maxY, finalMaxX);
-
-        double paddingY = (maxY - minY) * 0.15;
-        paddingY = Math.max(paddingY, 1.0);
-
-        if (!Double.isFinite(minY) || !Double.isFinite(maxY)) {
-            return new double[]{-5, 5, -5, 5};
+        // --- 3. 添加Y轴边距并返回 (所有方法通用) ---
+        if (!Double.isFinite(minY) || !Double.isFinite(maxY)){
+            minY = -5; maxY = 5; // Fallback
         }
-
+        double paddingY = Math.max((maxY - minY) * 0.2, 0.01);
         return new double[]{finalMinX, finalMaxX, minY - paddingY, maxY + paddingY};
     }
 
-    private boolean hasRangeChangedSignificantly(double[] newBounds) {
-        if (currentEquation == null) return true;
+    private double[] calculateDynamicBounds1D(IterationState state) {
+        double x1 = state.x_k_minus_1();
+        double x2 = state.x_k();
 
-        double oldWidth = twoDimPlot.getXMax() - twoDimPlot.getXMin();
-        double newWidth = newBounds[1] - newBounds[0];
-        if (Math.abs(oldWidth) < 1e-9 || Math.abs(newWidth) < 1e-9) return true;
-        if (Math.abs(1 - newWidth / oldWidth) > 0.5) return true;
+        double minX = Math.min(x1, x2);
+        double maxX = Math.max(x1, x2);
+        double paddingX = Math.max((maxX - minX) * 1.5, 0.01);
 
-        double oldCenter = (twoDimPlot.getXMax() + twoDimPlot.getXMin()) / 2;
-        double newCenter = (newBounds[1] + newBounds[0]) / 2;
-        return Math.abs(oldCenter - newCenter) / oldWidth > 0.5;
+        return new double[]{minX - paddingX, maxX + paddingX};
     }
+
+    // --- UI辅助方法 ---
 
     private void updateUiForSelectedMethod() {
         String selected = methodComboBox.getSelectionModel().getSelectedItem();
@@ -212,18 +284,7 @@ public class MainController {
         boolean isSecant = selected.equals(secantMethodName);
         x1Container.setVisible(isSecant); x1Container.setManaged(isSecant);
     }
-    private List<Double> generateSequence(IterativeMethod method, Equation eq, double x0, int iterations) {
-        if (method instanceof SecantMethod) {
-            try {
-                double x1 = Double.parseDouble(secondInitialValueField.getText());
-                return ((SecantMethod) method).generateSequence(eq, x0, x1, iterations);
-            } catch (NumberFormatException e) {
-                showError("Invalid Input", "Please enter a valid initial value for x1.");
-                return List.of();
-            }
-        }
-        return method.generateSequence(eq, x0, iterations);
-    }
+
     private Color getColorForMethod(IterativeMethod method) {
         if (method instanceof NewtonMethod) return Color.BLUE;
         if (method instanceof SteffensenMethod) return Color.GREEN;
@@ -232,8 +293,9 @@ public class MainController {
         if (method instanceof DampedNewtonMethod) return Color.rgb(75, 0, 130);
         if (method instanceof SinglePointSecantMethod) return Color.ORANGE;
         if (method instanceof SecantMethod) return Color.PURPLE;
-        return Color.RED;
+        return Color.RED; // Default for SimpleIterationMethod etc.
     }
+
     private void showError(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);

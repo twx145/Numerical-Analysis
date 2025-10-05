@@ -108,7 +108,7 @@
                         <mainClass>com.twx.iterative_methods.Main</mainClass>
 
                         <bundleJre>true</bundleJre>
-                        <generateInstaller>true</generateInstaller>
+                        <generateInstaller>false</generateInstaller>
                         <administratorRequired>false</administratorRequired>
                         <platform>windows</platform>
 

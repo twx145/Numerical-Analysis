@@ -18,7 +18,7 @@ public class MainApp extends Application {
         String css = Objects.requireNonNull(this.getClass().getResource("styles.css")).toExternalForm();
         scene.getStylesheets().add(css);
 
-        stage.setTitle("数值分析 - 方程迭代解法可视化");
+        stage.setTitle("方程迭代解法可视化");
         stage.setScene(scene);
         stage.show();
     }
