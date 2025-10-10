@@ -1,0 +1,13 @@
+\contentsline {section}{\numberline {1}引言}{1}{section.1}%
+\contentsline {section}{\numberline {2}迭代解法的原理}{1}{section.2}%
+\contentsline {subsection}{\numberline {2.1}理论基础}{1}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}技术现状}{1}{subsection.2.2}%
+\contentsline {section}{\numberline {3}java软件实现}{1}{section.3}%
+\contentsline {subsection}{\numberline {3.1}图表示例}{1}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}表示例}{1}{subsection.3.2}%
+\contentsline {section}{\numberline {4}迭代方法对比}{2}{section.4}%
+\contentsline {section}{\numberline {5}总结}{2}{section.5}%
+\contentsline {section}{致谢}{2}{section.5}%
+\contentsline {section}{附录}{3}{section.5}%
+\contentsline {section}{\numberline {A}高斯-赛德尔迭代法MATLAB代码}{3}{appendix.A}%
+\contentsline {section}{\numberline {B}实验原始数据记录}{3}{appendix.B}%
