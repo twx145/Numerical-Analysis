@@ -829,7 +829,7 @@ sorting=none         % 按引用顺序排序
 	
 	我的软件采用了模型-视图-控制器（MVC）的设计模式，下方为我的软件结构图，这种模式将主要的功能解耦，在日后较易进行进一步的扩展。
 	
-	\begin{figure}
+	\begin{figure}[h]
 		\centering 
 		\includegraphics[width=0.8\textwidth]{pic/1.png} 
 		\caption{软件的MVC架构图} % 图片的标题
@@ -862,23 +862,88 @@ sorting=none         % 按引用顺序排序
 	
 	\subsubsection{函数字符串识别}
 	
+	为了让软件具备更好的灵活性，这里我使用了java的强大第三方库exp4j来解析用户以字符串形式输入的函数方程。它的具体功能被封装到 \texttt{Equation} 类中。这个类的核心工作流程如下：
+	
+	\begin{enumerate}
+		\item \textbf{表达式构建}: 当用户输入函数字符串时，程序会调用 exp4j 的 \texttt{ExpressionBuilder}将字符串解析成一个内部的 \texttt{Expression} 对象，并声明 \texttt{"x"} 为其唯一变量。
+		
+		\item \textbf{函数求值}: \texttt{Equation} 类对外提供 \texttt{getF()} 方法。当外部代码需要计算 \(f(x)\) 在某一点的值时，只需调用此函数。其内部会执行具体的计算将答案数值赋给变量 \texttt{"x"} 并返回计算结果。
+		
+		\item \textbf{自动数值微分}: 为了使用牛顿法等需要导数 \(f'(x)\) 的算法，这里软件在 \texttt{Equation} 类中实现了自动数值微分功能。在 \texttt{getDf()} 方法中，程序采用\textbf{中心差分法}来近似计算导数：
+		\[
+		f'(x) \approx \frac{f(x+h) - f(x-h)}{2h}
+		\]
+		其中 \(h\) 是一个极小的步长。
+	\end{enumerate}
 	
 	
 	\subsubsection{迭代功能实现}
 	
+	软件的迭代功能如总体设计中所述由策略加迭代器构成。接下来以牛顿法为例展示一下迭代的完整流程。
+	
+	该功能的实现分为两个层次：策略类 \texttt{NewtonMethod} 和其内部的迭代器类 \texttt{NewtonIterator}。
+	
+	\begin{enumerate}
+		\item \textbf{策略类 (\texttt{NewtonMethod})}:
+		该类是策略模式的具体实现，它实现了 \texttt{IterativeMethod} 接口，负责接收 \texttt{Equation} 对象和初始值 \texttt{x0}，然后创建并返回一个专门用于执行牛顿法迭代过程的 \texttt{NewtonIterator} 实例。
+		
+		\item \textbf{状态管理类 (\texttt{NewtonIterator})}:
+		这个类实现了 \texttt{MethodIterator} 接口，是执行迭代计算的核心。
+		\begin{itemize}
+			\item \textbf{状态封装}: 这个类纪录了迭代过程中所有详细的迭代信息。
+			\item \textbf{核心迭代逻辑 (\texttt{next()} 方法)}: 这是迭代器的核心。
+			\begin{enumerate}
+				\item 获取上一步函数值 \(f(x_k)\) 和导数值 \(f'(x_k)\)。
+				\item 应用牛顿法数学公式 \(x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}\) 计算出当前值 \texttt{x\_curr}同时进行健壮性检查。
+				\item 将本次迭代产生的所有信息（步数、当前值、函数值、误差等）封装到一个数据对象中。
+				\item 更新迭代器内部的状态将步数加一并将当前值滚动赋给上一步迭代值（\(x_prev\)。
+				\item 返回封装好的 \texttt{IterationState} 对象给控制器，以供其更新视图。
+			\end{enumerate}
+			\item \textbf{终止条件判断}:  (\texttt{hasNext()} 方法定义了迭代的终止条件，包括达到预设的最大迭代次数，或计算结果出现无效值等状况，以防止程序陷入无限循环。
+		\end{itemize}
+	\end{enumerate}
+	
+	通过这种方式，算法的定义与算法的单次执行过程被分离开来，使得主控制器的逻辑保持简洁，只需与标准接口交互即可驱动所有不同类型的迭代方法。
+	
 	
 	\subsection{软件界面介绍}
+	
+	下图展示了软件的用户界面。可以看到整个界面分为三部分：上侧为用户输入区，在这里用户输入自己想求解的方程、选择想使用的迭代方法，并重置或单步运行迭代；左下方为可视化区域，在这里用户可以看到二维平面和一维数轴上迭代点的变化；右下侧为迭代日志，在这里用户可以看到每一次迭代的详细信息。
+	
+	\begin{figure}[h]
+		\centering 
+		\includegraphics[width=0.6\textwidth]{pic/2.png} 
+		\caption{软件用户界面} % 图片的标题
+		\label{fig:2} % 为图片设置一个标签，用于在正文中引用
+	\end{figure}
 	
 	\newpage
 	\section{总结}
 	
 	\subsection{工作总结}
 	
+	总的来说本报告较为详细的分析了不同迭代算法各自的数学原理和收敛性分析，就其本质来看，所有相关迭代方法均是由最初的普通迭代法改造而来，其本质无外乎修改映射方式使映射的收缩效果更好来加快收敛速度。
 	
+	此外，本报告还提供了一款基于java开发的可视化软件，并以此来详细的展示多种迭代方法在二维坐标系和一维数轴上的表现。本软件采用了MVC布局，便于日后的拓展任务。
+	
+	通过将抽象的公式转化为直观的动画和图，本报告连接了编程实践和理论学习，一定程度上减轻了第二章的学习任务，达到了预期的目标。
+	
+	最后，本人建议您可以从GitHub（\url{https://github.com/twx145/Numerical-Analysis/releases/tag/v1.0.0}）上下载最新软件。
 	
 	\subsection{展望}
 	
+	为了进一步提升本软件的广度和深度，未来可以从以下几部分展开研究
 	
+	\begin{itemize}
+		\item \textbf{扩充算法库}:
+		集成更多高级算法，如处理多项式根的拉盖尔法，并针对重根问题提供优化解法。
+		
+		\item \textbf{拓展至高维问题}:
+		将软件功能从求解单一方程升级至求解非线性方程组。
+		
+		\item \textbf{增强交互与智能}:
+		开发如拖拽初始点、用户缩放图像等功能，使探索分析过程更加便捷、智能。
+	\end{itemize}
 	
 	
 	% ======================================================================
@@ -1109,6 +1174,7 @@ sorting=none         % 按引用顺序排序
 		}
 	\end{lstlisting}
 	
+	\newpage
 	\section{函数识别部分完整代码}
 	\markboth{附录}{}
 	

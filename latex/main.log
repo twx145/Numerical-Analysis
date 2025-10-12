@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2024.10.24)  12 OCT 2025 16:11
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2024.10.24)  12 OCT 2025 18:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1451,6 +1451,14 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [13]
+Overfull \hbox (32.4359pt too wide) in paragraph at lines 884--885
+[]\TU/SimSun(1)/b/n/12 该 功 能 的 实 现 分 为 两 个 层 次：|  策 略 类 \TU/lmtt/m/n/12 NewtonM
+ethod \TU/SimSun(1)/b/n/12 和 其 内 部 的 迭 代 器 类 \TU/lmtt/m/n/12 NewtonIterator\TU/
+SimSun(1)/b/n/12 。| 
+ []
+
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 887.
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1460,6 +1468,9 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [14]
+File: pic/2.png Graphic file (type bmp)
+<pic/2.png>
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1469,6 +1480,21 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [15]
+Overfull \hbox (10.59084pt too wide) in paragraph at lines 931--932
+[]\TU/SimSun(1)/b/n/12 最 后，|  本 人 建 议 您 可 以 从 \TU/TimesNewRoman(0)/m/n/12 GitHu
+b |\TU/SimSun(1)/b/n/12 （[][]$[][][][][] [] [] [] [][][][][][] [] [][][] [] [][
+][][][][] [] [][][][][][][][][][][][][][][][][][][] [] [][][][][][][][] []
+ []
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 14.49998pt, for example:
+(fancyhdr)                \setlength{\headheight}{14.49998pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+
+(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
+
+[16]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1491,7 +1517,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 File: lstlang1.sty 2024/02/21 1.10 listings language file
 )
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 929.
+nput line 994.
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1558,25 +1584,19 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 LaTeX Warning: There were multiply-defined labels.
 
-
-Package rerunfilecheck Warning: File `main.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `main.out':
-(rerunfilecheck)             Before: A4D0C781E49709D8DEB99EF3DC410EC9;3195
-(rerunfilecheck)             After:  614CB0B86561F779914EDEA073B997F5;3201.
+Package rerunfilecheck Info: File `main.out' has not changed.
+(rerunfilecheck)             Checksum: 614CB0B86561F779914EDEA073B997F5;3201.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 28301 strings out of 474773
- 584573 string characters out of 5753723
- 2221842 words of memory out of 5000000
- 50043 multiletter control sequences out of 15000+600000
- 566736 words of font info for 122 fonts, out of 8000000 for 9000
+ 28319 strings out of 474773
+ 584890 string characters out of 5753723
+ 2250842 words of memory out of 5000000
+ 50058 multiletter control sequences out of 15000+600000
+ 566744 words of font info for 123 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 79i,12n,93p,677b,5049s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 79i,12n,93p,677b,5050s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (26 pages).
+Output written on main.pdf (27 pages).

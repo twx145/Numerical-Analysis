@@ -22,11 +22,11 @@
 \contentsline {subsection}{\numberline {3.2}核心功能实现}{14}{subsection.3.2}%
 \contentsline {subsubsection}{\numberline {3.2.1}函数字符串识别}{14}{subsubsection.3.2.1}%
 \contentsline {subsubsection}{\numberline {3.2.2}迭代功能实现}{14}{subsubsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.3}软件界面介绍}{14}{subsection.3.3}%
-\contentsline {section}{\numberline {4}总结}{15}{section.4}%
-\contentsline {subsection}{\numberline {4.1}工作总结}{15}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}展望}{15}{subsection.4.2}%
+\contentsline {subsection}{\numberline {3.3}软件界面介绍}{15}{subsection.3.3}%
+\contentsline {section}{\numberline {4}总结}{16}{section.4}%
+\contentsline {subsection}{\numberline {4.1}工作总结}{16}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}展望}{16}{subsection.4.2}%
 \contentsline {section}{致谢}{2}{subsection.4.2}%
 \contentsline {section}{附录}{3}{subsection.4.2}%
 \contentsline {section}{\numberline {A}迭代部分完整代码}{3}{appendix.A}%
-\contentsline {section}{\numberline {B}函数识别部分完整代码}{7}{appendix.B}%
+\contentsline {section}{\numberline {B}函数识别部分完整代码}{8}{appendix.B}%
