@@ -42,7 +42,6 @@ public class SimplifiedNewtonMethod implements IterativeMethod {
                 k++;
                 return initialState;
             }
-
             // --- 执行一次简化牛顿法迭代 ---
             x_curr = x_prev - equation.getF().apply(x_prev) / dfx0;
 

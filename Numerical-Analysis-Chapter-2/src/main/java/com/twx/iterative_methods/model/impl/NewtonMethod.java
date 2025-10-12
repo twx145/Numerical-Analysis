@@ -36,23 +36,18 @@ public class NewtonMethod implements IterativeMethod {
         @Override
         public IterationState next() {
             if (k == 0) {
-                // 处理初始状态 k=0
                 double fx0 = equation.getF().apply(x_curr);
                 IterationState initialState = IterationState.initial(x_curr, fx0);
-
-                // 为下一次迭代做准备
                 x_prev = x_curr;
                 k++;
-
                 return initialState;
             }
-
             // --- 执行一次牛顿法迭代 ---
             double fx = equation.getF().apply(x_prev);
             double dfx = equation.getDf().apply(x_prev);
 
             if (Math.abs(dfx) < 1e-12) {
-                x_curr = Double.NaN; // 导数过小，无法继续
+                x_curr = Double.NaN;
             } else {
                 x_curr = x_prev - fx / dfx;
             }

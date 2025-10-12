@@ -7,12 +7,11 @@ import java.util.function.Function;
 public class Equation {
 
     private final Expression f, g;
-    private static final double H = 1e-7; // 用于数值微分的小步长
+    private static final double H = 1e-7; // 微分小步长
 
     // 构造函数不再需要导数表达式
     public Equation(String fStr, String gStr) {
         this.f = new ExpressionBuilder(fStr).variable("x").build();
-        // g(x) 可能为空，如果是，则创建一个始终返回NaN的表达式
         if (gStr != null && !gStr.isBlank()) {
             this.g = new ExpressionBuilder(gStr).variable("x").build();
         } else {

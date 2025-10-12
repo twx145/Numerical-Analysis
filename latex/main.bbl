@@ -65,105 +65,61 @@
       \field{dateera}{ce}
       \keyw{knuth1984}
     \endentry
-    \entry{einstein1905}{article}{}
-      \name{author}{1}{}{%
-        {{hash=3ebf53e52a3ce84f0ffb8553200a6a63}{%
-           family={Einstein},
-           familyi={E\bibinitperiod},
-           given={Albert},
-           giveni={A\bibinitperiod}}}%
+    \entry{SSBDA84C6D76690EA6A8711D933DAB5349AA}{book}{}
+      \name{author}{2}{}{%
+        {{hash=b4c1b137fd8abe64da23cd7c84710ae1}{%
+           family={Amat},
+           familyi={A\bibinitperiod},
+           given={Sergio},
+           giveni={S\bibinitperiod}}}%
+        {{hash=e491efe7a71eaca313ce83ce80110ad5}{%
+           family={Busquier},
+           familyi={B\bibinitperiod},
+           given={Sonia},
+           giveni={S\bibinitperiod}}}%
       }
-      \name{namea}{1}{}{%
-        {{hash=3ebf53e52a3ce84f0ffb8553200a6a63}{%
-           family={Einstein},
-           familyi={E\bibinitperiod},
-           given={Albert},
-           giveni={A\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {english}%
-      }
-      \strng{namehash}{3ebf53e52a3ce84f0ffb8553200a6a63}
-      \strng{fullhash}{3ebf53e52a3ce84f0ffb8553200a6a63}
-      \strng{bibnamehash}{3ebf53e52a3ce84f0ffb8553200a6a63}
-      \strng{authorbibnamehash}{3ebf53e52a3ce84f0ffb8553200a6a63}
-      \strng{authornamehash}{3ebf53e52a3ce84f0ffb8553200a6a63}
-      \strng{authorfullhash}{3ebf53e52a3ce84f0ffb8553200a6a63}
-      \strng{nameabibnamehash}{3ebf53e52a3ce84f0ffb8553200a6a63}
-      \strng{nameanamehash}{3ebf53e52a3ce84f0ffb8553200a6a63}
-      \strng{nameafullhash}{3ebf53e52a3ce84f0ffb8553200a6a63}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Annalen der Physik}
-      \field{langid}{english}
-      \field{languageid}{english}
-      \field{lansortorder}{4}
-      \field{number}{10}
-      \field{title}{Zur Elektrodynamik bewegter Körper}
-      \field{usera}{J}
-      \field{userd}{english}
-      \field{userf}{english}
-      \field{volume}{322}
-      \field{year}{1905}
-      \field{dateera}{ce}
-      \field{pages}{891\bibrangedash 921}
-      \range{pages}{31}
-      \verb{doi}
-      \verb 10.1002/andp.19053221004
-      \endverb
-      \keyw{einstein1905}
-    \endentry
-    \entry{dirac1928}{inproceedings}{}
-      \name{author}{1}{}{%
-        {{hash=697e1296b89754526b54bf5c2ce7302a}{%
-           family={Dirac},
-           familyi={D\bibinitperiod},
-           given={Paul\bibnamedelimb A.\bibnamedelimi M.},
-           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
-      }
-      \name{namea}{1}{}{%
-        {{hash=697e1296b89754526b54bf5c2ce7302a}{%
-           family={Dirac},
-           familyi={D\bibinitperiod},
-           given={Paul\bibnamedelimb A.\bibnamedelimi M.},
-           giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+      \name{namea}{2}{}{%
+        {{hash=b4c1b137fd8abe64da23cd7c84710ae1}{%
+           family={Amat},
+           familyi={A\bibinitperiod},
+           given={Sergio},
+           giveni={S\bibinitperiod}}}%
+        {{hash=e491efe7a71eaca313ce83ce80110ad5}{%
+           family={Busquier},
+           familyi={B\bibinitperiod},
+           given={Sonia},
+           giveni={S\bibinitperiod}}}%
       }
       \list{language}{1}{%
         {english}%
       }
       \list{publisher}{1}{%
-        {The Royal Society}%
+        {Springer, Cham}%
       }
-      \strng{namehash}{697e1296b89754526b54bf5c2ce7302a}
-      \strng{fullhash}{697e1296b89754526b54bf5c2ce7302a}
-      \strng{bibnamehash}{697e1296b89754526b54bf5c2ce7302a}
-      \strng{authorbibnamehash}{697e1296b89754526b54bf5c2ce7302a}
-      \strng{authornamehash}{697e1296b89754526b54bf5c2ce7302a}
-      \strng{authorfullhash}{697e1296b89754526b54bf5c2ce7302a}
-      \strng{nameabibnamehash}{697e1296b89754526b54bf5c2ce7302a}
-      \strng{nameanamehash}{697e1296b89754526b54bf5c2ce7302a}
-      \strng{nameafullhash}{697e1296b89754526b54bf5c2ce7302a}
+      \strng{namehash}{3f4caac1ad0fee1eedae08c9d82da90a}
+      \strng{fullhash}{457a2eff7cc5f31c2723c08489778591}
+      \strng{bibnamehash}{457a2eff7cc5f31c2723c08489778591}
+      \strng{authorbibnamehash}{457a2eff7cc5f31c2723c08489778591}
+      \strng{authornamehash}{3f4caac1ad0fee1eedae08c9d82da90a}
+      \strng{authorfullhash}{457a2eff7cc5f31c2723c08489778591}
+      \strng{nameabibnamehash}{457a2eff7cc5f31c2723c08489778591}
+      \strng{nameanamehash}{3f4caac1ad0fee1eedae08c9d82da90a}
+      \strng{nameafullhash}{457a2eff7cc5f31c2723c08489778591}
       \field{sortinit}{2}
       \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{booktitle}{Proceedings of the Royal Society A: Mathematical, Physical and Engineering Sciences}
       \field{langid}{english}
       \field{languageid}{english}
       \field{lansortorder}{4}
-      \field{number}{778}
-      \field{title}{The Quantum Theory of the Electron}
-      \field{usera}{C}
+      \field{title}{Advances in Iterative Methods for Nonlinear Equations}
+      \field{usera}{M}
       \field{userd}{english}
       \field{userf}{english}
-      \field{volume}{117}
-      \field{year}{1928}
-      \field{dateera}{ce}
-      \field{pages}{610\bibrangedash 624}
-      \range{pages}{15}
-      \keyw{dirac1928}
+      \verb{doi}
+      \verb 10.1007/978-3-319-39228-8
+      \endverb
+      \keyw{SSBDA84C6D76690EA6A8711D933DAB5349AA}
     \endentry
   \enddatalist
 \endrefsection

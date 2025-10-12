@@ -2,6 +2,7 @@
 % !TEX encoding = UTF-8
 
 \documentclass[12pt, a4paper, dotinlabels]{article}
+%\documentclass[zihao=-4, a4paper, UTF8]{ctexart}
 
 % ======================================================================
 % 1. 宏包设置 (Preamble)
@@ -25,6 +26,7 @@
 
 % --- 图形与表格相关 ---
 \usepackage{graphicx} % 插入图片
+\usepackage{subcaption} % 插入子图
 \usepackage{caption} % 自定义图表标题
 \captionsetup{labelsep=space, justification=centering, font=small} % 图表标题设置
 \usepackage{subcaption} % 子图
@@ -70,7 +72,7 @@ sorting=none         % 按引用顺序排序
 \usepackage{titlesec} % 自定义章节标题格式
 \titleformat{\section}{\Large\bfseries\sffamily}{\thesection}{1em}{}
 \titleformat{\subsection}{\large\bfseries\sffamily}{\thesubsection}{1em}{}
-\titleformat{\subsubsection}{\normalsize\bfseries}{\thesubsubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\sffamily}{\thesubsubsection}{1em}{}
 
 \usepackage{tocloft}
 \renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}} % for \section
@@ -83,6 +85,37 @@ sorting=none         % 按引用顺序排序
 \usepackage{setspace}
 \setlength{\cftbeforesecskip}{0pt}
 \setlength{\cftbeforesubsecskip}{0pt}
+
+% --- 代码显示宏包与样式设置 ---
+\usepackage{listings}
+\usepackage{xcolor} 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.95}
+% 设置 listings 的全局样式
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{blue},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\footnotesize\ttfamily, % 设置代码字体为等宽字体
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2,
+	frame=single, % 给代码块添加边框
+	rulecolor=\color{black},
+	title=\lstname % 显示文件名或标题
+}
+\lstset{style=mystyle} % 应用全局样式
 
 % 自定义 abstract 环境
 \renewenvironment{abstract}
@@ -150,20 +183,21 @@ sorting=none         % 按引用顺序排序
 	% --- 切换到正文页码和样式 ---
 	\newpage
 	\pagenumbering{roman}
-	\pagestyle{plainfancy}
+	\thispagestyle{plainfancy}
 	
 	% --- 摘要与关键词 ---
 	\begin{abstract}
-		研究目的、方法、结果和结论。
 		
 		在数值分析的第二章课程中我们学习了非线性方程的迭代解法，这一类方法是为计算机量身定制的，不同于以往我们在学习中接触到的解析式解法，因此，本报告的目的是在计算机中实际应用上述迭代方法，以加深自己对迭代解法的理解。
 		
 		本报告选择使用JAVA语言来进行上机实现，原因有三：其一为本学期新增JAVA选修课可以借此机会增加对JAVA语言的熟练度；其二JAVA还提供较为方便的javafx方便将我的程序更好的可视化；其三JAVA可以将我的程序方便的转化为软件，方便他人一键安装使用。
 		
-		在上机期间我手动编写了有关迭代方法————牛顿法、艾特肯迭代法、单点弦截法等9种方法，其余部分借助AI完成相关内容的编写。该软件
+		在上机期间我手动编写了有关迭代方法——牛顿法、艾特肯迭代法、单点弦截法等8种方法，其余部分借助AI完成相关内容的编写。该软件展现了方程迭代在二维坐标系和一维坐标轴上的变化，方便我们从不同的角度去观察映射对迭代行为的影响。此外，本程序记录每次迭代产生的相关数据，包括x轴坐标值、f(x)值、相邻两次迭代x轴坐标差值等内容。
+		
+		本报告展示了不同迭代方法的代码实现、对比了不同方法之间的差异，最后提供了一个安装程序，以便他人可以方便的使用迭代方法的演示功能。以下为我的GitHub仓库：\url{https://github.com/twx145/Numerical-Analysis}，其中记录了所有相关代码和latex\cite{knuth1984}文案。
 		
 		\vspace{1em} % 增加一点垂直间距
-		\noindent\textbf{关键词：} 方程迭代解法；牛顿迭代法；可视化软件
+		\noindent {\heiti 关键词：} 方程迭代解法；牛顿迭代法；可视化软件
 	\end{abstract}
 	
 	\newpage
@@ -185,74 +219,665 @@ sorting=none         % 按引用顺序排序
 	% ======================================================================
 	
 	\section{引言}
-	\label{sec:intro}
 	
-	这是引言部分。您可以在这里介绍研究背景、意义以及论文的主要工作和结构。
+	非线性方程因其通常能比线性方程更好的描述事物的规律而在学习生活中很常见，但是却鲜有非线性方程可以求得解析解，因此，为计算机计算方程解而量身打造的迭代法变得很重要，迭代法通过一系列逐步逼近可以得到预期精度的解，具有高效精准的特点。
 	
-	在LaTeX中，您可以使用 `\cite{}` 命令来引用参考文献。例如，Knuth的经典著作《The TeXbook》 \cite{knuth1984} 是一本非常好的参考书。您也可以同时引用多篇文献，例如 \cite{einstein1905, dirac1928}。
+	本报告的核心任务包含以下三点：一是研究课内外常见的8种迭代解法\cite{SSBDA84C6D76690EA6A8711D933DAB5349AA}；二为利用JAVA打造一个迭代方法可视化软件。该软件允许用户自主输入不同的方程并选择不同迭代策略来执行迭代求解操作，此外我的软件还提供了相关的指标来深入分析各个迭代方法；三是通过数值实验的方法来比较不同迭代方法在收敛速度和稳定性的表现。
 	
-	\section{迭代解法的原理}
-	\label{sec:related}
 	
-	在这一章中，您可以回顾与您的研究相关的先前工作。
+	
+	\section{迭代解法的原理与流程}
+	
+	本节着重介绍迭代法的原理，同时详细的介绍8种迭代法各自的基本思想、数学公式、算法步骤、收敛性分析与优缺点。
 	
 	\subsection{理论基础}
-	\label{ssec:theory}
-	介绍相关的理论和公式。例如，爱因斯坦的质能方程：
-	\begin{equation}
-		E = mc^2
-		\label{eq:emc2}
-	\end{equation}
-	我们可以通过 `\ref{eq:emc2}` 来引用公式 \eqref{eq:emc2}。
 	
-	\subsection{技术现状}
-	\label{ssec:state-of-art}
-	介绍当前的技术发展水平。
+	这里我们先讨论一下何为压缩映射，以及压缩映射的性质，稍后再讨论压缩映射与其性质是如何帮助我们通过迭代法算出方程解的。
 	
-	\section{java软件实现}
-	\label{sec:method}
+	\subsubsection{压缩映射}
 	
-	详细描述您所采用的研究方法。
+	压缩映射是针对一个函数映射在某一个闭区间上而言的。若在一个区间内每经过一次映射变换，各个点依旧在这个区间内并且它们之间的距离都缩小，我们则称该映射在该区间是一个压缩映射。
 	
-	\subsection{图表示例}
-	下面是一个插入图片的示例（如图\ref{fig:example}所示）。
+	更加严谨的来说，我们有一个映射 \(g(x)\) 和一个区间 \(I = [x_1, x_2]\)。若在该区间 \(I\) 内任意两点 \(a, b\)，在经过映射后的 \(g(a)\) 和 \(g(b)\) 依旧在区间 \(I\) 内，并且距离缩小——即存在一个 \(L < 1\) 使得：
+	\[
+	|g(a) - g(b)| \leq L |a - b|
+	\]
+	则我们称该映射为压缩映射。这个常数 \(L\) 被称为压缩因子。\(L < 1\) 这个条件保证了“收缩”的发生。
 	
-	\begin{figure}[htbp]
-		\centering
-		\includegraphics[width=0.5\textwidth]{example-image-a} % 确保您有这个图片文件，或者使用您自己的图片
-		\caption{这是一个示例图片}
-		\label{fig:example}
+	\subsubsection{压缩映射的性质}
+	
+	一个压缩映射可以在多次迭代后将区间内的点汇集到一个称为不动点的位置。
+	
+	严谨的来说，我们可以构建一个压缩多次后两点间距离上界的等比数列，由于 \(L < 1\) 这个条件的存在，我们不难得知多次迭代后这个数列必将收敛于0。
+	
+	\subsubsection{如何判断压缩映射}
+	
+	根据微积分中的中值定理，我们知道对于任意的 \(x\) 和 \(y\)，在它们之间必定存在一个点 \(c\)，使得：
+	\[
+	g(x) - g(y) = g'(c) \cdot (x - y)
+	\]
+	两边取绝对值得到：
+	\[
+	|g(x) - g(y)| = |g'(c)| \cdot |x - y|
+	\]
+	现在将这个公式与压缩映射的定义 \(|g(x) - g(y)| \leq L |x - y|\) 我们不难发现：\(|g'(x)|\) 的大小决定了映射是压缩还是发散的。如果我们能在一个包含根的区间 \(I\) 上找到一个常数 \(L < 1\)，使得对区间 \(I\) 内所有的 \(x\)，都有 \(|g'(x)| \leq L\)，那么 \(g(x)\) 在该区间上就是一个压缩映射。
+	
+	
+	\subsubsection{方程迭代求根}
+	
+	现在我们知道了一个压缩映射 \(g(x)\) 通过多次迭代可以收敛于一个不动点 \(x_0\) (\(x_0 = g(x_0)\))，那我们就可以将原始方程 \(f(x) = 0\) 变形为 \(x = g(x)\)，随后通过多次迭代算出不动点 \(x_0 = g(x_0)\)，这里 \(x_0\) 就是方程的解。
+	
+	\subsection{详细迭代方法}
+	
+	\subsubsection{普通迭代法}
+	
+	\noindent{\heiti 基本思想}
+	
+	普通迭代法的主要想法就是朴素的将方程 \(f(x) = 0\) 等价变形为 \(x = g(x)\) 从而直接求得这个新函数的不动点。选定一个初始近似值 \(x_0\) 后，通过迭代公式 \(x_{k+1} = g(x_k)\) 产生一个序列 \(x_0, x_1, x_2, \ldots\)。如果这个序列收敛于某个值 \(x_0\)，那么 \(x_0\) 就是方程的解。
+	
+	\vspace{1em}
+	\noindent{\heiti 数学公式}
+	
+	普通迭代法的迭代公式为：
+	\(
+	x_{k+1} = g(x_k), \quad k = 0, 1, 2, \ldots
+	\)
+	
+	\vspace{1em}
+	\noindent{\heiti 算法步骤}
+	
+		\textbf{1.} 将方程 \(f(x) = 0\) 转换为 \(x = g(x)\)。\\
+		\indent\textbf{2.} 选取一个初始近似值 \(x_0\) 和一个允许误差 \(\epsilon\)。\\
+		\indent\textbf{3.} 根据迭代公式 \(x_{k+1} = g(x_k)\) 计算下一个近似值。\\
+		\indent\textbf{4.} 判断是否满足收敛条件 \(|x_{k+1} - x_k| < \epsilon\)。若满足，则停止迭代，\(x_{k+1}\) 即为所求解的近似根。\\
+		\indent\textbf{5.} 若不满足收敛条件，则令 \(x_k = x_{k+1}\)，返回第3步继续迭代。
+	
+	\vspace{1em}\newpage
+	\noindent{\heiti 收敛性分析}
+	
+	不动点迭代法的收敛性与迭代函数 \(g(x)\) 的性质密切相关。根据上述的压缩映射相关知识，我们知道只有迭代函数 \(g(x)\) 满足以下两个条件迭代过程才收敛：
+
+		\textbf{1.} 对于任意 \(x \in [a, b]\)，都有 \(g(x) \in [a, b]\)。\\
+		\indent\textbf{2.} 存在一个常数 \(0 \le L < 1\)，使得对于任意 \(x \in (a, b)\)，都有 \(|g'(x)| \le L\)。
+	
+	\vspace{1em}
+	\noindent{\heiti 优缺点}
+	
+		\textbf{·} {优点}：算法简单朴素，易于理解。\\
+		\indent\textbf{·}{缺点}：\\
+			\indent\indent\textbf{-} 迭代函数的构造不唯一，不同的构造方式可能导致收敛性不同，甚至发散。\\
+			\indent\indent\textbf{-} 收敛速度通常较慢，仅为一阶收敛。\\
+			\indent\indent\textbf{-} 对初值的选取比较敏感，需要选取在根附近的初值才能保证收敛。
+	
+	\vspace{1em}
+	\noindent{\heiti 软件示例}
+	
+	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 和迭代函数\(g(x) = \sqrt[3]{x+1}\)时的软件运行截图（详细代码见附录A）。
+	
+	\begin{figure}[h] 
+		\centering 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/1.2.png}
+			\caption{普通迭代法软件运行截图1} 
+			\label{fig:1.1}
+		\end{subfigure}
+		\hfill 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/1.1.png} 
+			\caption{普通迭代法软件运行截图2}
+			\label{fig:1.2}
+		\end{subfigure}
+		
+		\caption{普通迭代法软件运行截图}
+		\label{fig:11} 
 	\end{figure}
 	
-	\subsection{表示例}
-	下面是一个使用 `booktabs` 宏包创建三线表的示例（如表\ref{tab:example}所示）。
 	
-	\begin{table}[htbp]
-		\centering
-		\caption{这是一个示例表格}
-		\label{tab:example}
-		\begin{tabular}{lcr}
-			\toprule
-			\textbf{姓名} & \textbf{专业} & \textbf{年龄} \\
-			\midrule
-			张三 & 计算机科学 & 22 \\
-			李四 & 物理学 & 23 \\
-			王五 & 化学 & 21 \\
-			\bottomrule
-		\end{tabular}
-	\end{table}
+	\subsubsection{牛顿迭代法}
+	
+	\noindent{\heiti 基本思想}
+	
+	从普通迭代法的收敛性理论我们知道，迭代函数的导数绝对值越小，收敛速度就越快。牛顿法正是基于这一思想，改造迭代函数将导数的绝对值变为零以快速收敛。
+	
+	我们将原始方程 \(f(x)=0\) 转化为等价的不动点形式 \(x = g(x)\)。为了引入可调节的参数，我们构造一个更普遍的迭代函数：
+	\[
+	g(x) = x + \alpha(x)f(x)
+	\]
+	其中 \(\alpha(x)\) 是一个待定的函数。只要 \(f(x)=0\)，这个形式就等价于 \(x=g(x)\)。由上述推理可知我们希望在根 \(x_0\) 附近有 \(|g'(x)| \approx 0\)。对 \(g(x)\) 求导可得：
+	\[
+	g'(x) = 1 + \alpha'(x)f(x) + \alpha(x)f'(x)
+	\]
+	在根 \(x_0\) 附近，由于 \(f(x)\approx0\)，上式简化为：
+	\[
+	g'(x) = 1 + \alpha(x)f'(x)
+	\]
+	我们令 \(g'(x) = 0\)，解得：
+	\[
+	\alpha(x) = -\frac{1}{f'(x)}
+	\]
+	由此，我们选择 \(\alpha(x) = -\frac{1}{f'(x)}\) 作为我们的迭代函数，便得到了牛顿迭代法。它通过每一步都选取能让迭代函数导数趋近于零的方向，从而实现了局部二阶收敛。
+	
+	\vspace{1em}
+	\noindent{\heiti 数学公式}
+	
+	我们将 \(\alpha(x_k) = -\frac{1}{f'(x_k)}\) 代入迭代公式 \(x_{k+1} = x_k + \alpha(x_k)f(x_k)\)，即可得到牛顿法的迭代公式：
+	\[
+	x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}
+	\]
+	\vspace{1em}
+	\noindent{\heiti 算法步骤}
+	
+	\textbf{1.} 选取一个初始近似值 \(x_0\) 和一个允许误差 \(\epsilon\)。\\
+	\indent\textbf{2.} 计算函数值和导数值，计算 \(f(x_k)\) 和一阶导数 \(f'(x_k)\)。\\
+	\indent\textbf{3.} 根据迭代公式 \(x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}\) 计算下一个近似值。\\
+	\indent\textbf{4.} 判断是否满足收敛条件 \(|x_{k+1} - x_k| < \epsilon\)。若满足，则停止迭代，\(x_{k+1}\) 即为所求解的近似根。\\
+	\indent\textbf{5.} 若不满足收敛条件，则令 \(x_k = x_{k+1}\)，返回第3步继续迭代。
+	
+	\vspace{1em}
+	\noindent{\heiti 收敛性分析}
+	
+	牛顿法有局部收敛特性，且在一定情况收敛速度很快。
+	
+	\textbf{1.} 若\(x_0\) 为方程单根且选定的初值距离根较近则收敛阶为2。\\
+	\indent\textbf{2.} 若\(x_0\) 为方程重根则收敛阶为1。\\
+	\indent\textbf{3.} 迭代函数是否收敛严重依赖于初值的选择，只有初值距离根足够接近才会收敛。
+	
+	\vspace{1em}
+	\noindent{\heiti 优缺点}
+	
+		\textbf{·} {优点}：\\
+			\indent\indent\textbf{-} 收敛速度快，对于单根，具有二阶收敛性。\\
+			\indent\indent\textbf{-} 算法简洁，迭代公式形式简单易于理解。\\
+		\indent\textbf{·}{缺点}：\\
+			\indent\indent\textbf{-} 初始值敏感，只有在跟附近才可能收敛到根处。\\
+			\indent\indent\textbf{-} 需要计算导数，对复杂函数求导计算量大，该方法受限。
+			
+	\vspace{1em}
+	\noindent{\heiti 软件示例}
+	
+	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 时的软件运行截图（详细代码见附录A）。
+	
+	\begin{figure}[h] 
+		\centering 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/2.2.png}
+			\caption{牛顿迭代法软件运行截图1} 
+			\label{fig:2.1}
+		\end{subfigure}
+		\hfill 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/2.1.png} 
+			\caption{牛顿迭代法软件运行截图2}
+			\label{fig:2.2}
+		\end{subfigure}
+		
+		\caption{牛顿迭代法软件运行截图}
+		\label{fig:22} 
+	\end{figure}
+	
+	\subsubsection{简化切线法}
+	
+	\noindent{\heiti 基本思想}
+	
+	牛顿法需要在每次迭代时都计算导数 \(f'(x_k)\)，当导数函数 \(f'(x)\) 的形式复杂时，会出现计算量大、耗时等问题。简化切线法因此诞生。该方法只在初始点 \(x_0\) 计算一次导数 \(f'(x_0)\)，并在后续的所有迭代中都使用这个固定的斜率来代替牛顿迭代法种变化的 \(f'(x_k)\)。
+	
+	\vspace{1em}
+	\noindent{\heiti 数学公式}
+	
+	迭代公式为：
+	\[
+	x_{k+1} = x_k - \frac{f(x_k)}{f'(x_0)}
+	\]
+	
+	\vspace{1em}
+	\noindent{\heiti 算法步骤}
+	
+	\textbf{1.} 选取一个初始近似值 \(x_0\) 和一个允许误差 \(\epsilon\)。\\
+	\indent\textbf{2.} 计算一次导数值作为固定斜率 \(m = f'(x_0)\)。\\
+	\indent\textbf{3.} 根据迭代公式 \(x_{k+1} = x_k - \frac{f(x_k)}{m}\) 计算下一个近似值。\\
+	\indent\textbf{4.} 判断是否满足收敛条件 \(|x_{k+1} - x_k| < \epsilon\)。若满足，则停止迭代。\\
+	\indent\textbf{5.} 若不满足，则令 \(x_k = x_{k+1}\)，返回第3步。
+	
+	\vspace{1em}
+	\noindent{\heiti 收敛性分析}
+	
+	该方法线性收敛，收敛速度慢于牛顿法。当初始值 \(x_0\) 离根足够近并且在根的邻域内满足条件 \(|1 - f'(x)/f'(x_0)| < 1\)，该方法是收敛的。
+	
+	\vspace{1em}
+	\noindent{\heiti 优缺点}
+	
+	\textbf{·} {优点}：极大地减少了计算量（只计算一次导数）。\\
+	\indent\textbf{·}{缺点}：\\
+	\indent\indent\textbf{-} 收敛速度从牛顿法的二阶下降到一阶，收敛速度变慢。\\
+	\indent\indent\textbf{-} 对初始值的选取较为敏感。
+	
+	\vspace{1em}
+	\noindent{\heiti 软件示例}
+	
+	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 时的软件运行截图（详细代码见附录A）。
+	
+	\begin{figure}[h] 
+		\centering 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/4.2.png}
+			\caption{简化切线法软件运行截图1} 
+			\label{fig:4.1}
+		\end{subfigure}
+		\hfill 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/4.1.png} 
+			\caption{简化切线法软件运行截图2}
+			\label{fig:4.2}
+		\end{subfigure}
+		
+		\caption{简化切线法软件运行截图}
+		\label{fig:44} 
+	\end{figure}
+	
+	\subsubsection{修正切线法}
+	
+	\noindent{\heiti 基本思想}
+	
+	修正切线法是牛顿法和简化切线法的一种折中方案。这种方法会定期执行一次导数计算，这既避免了牛顿法多次大量的导数计算又增加了简化切线法的收敛速度，在计算效率和收敛速度上取得了平衡。
+	
+	\vspace{1em}
+	\noindent{\heiti 数学公式}
+	
+	迭代公式为：
+	\[
+	x_{k+1} = x_k - \frac{f(x_k)}{m_j}
+	\]
+	其中斜率 \(m_j\) 会定期更新。这里我的程序设置了一个更新间隔 \(N\)，当迭代次数 \(k\) 是 \(N\) 的倍数时才更新斜率 \(m_j = f'(x_k)\) 。
+	
+	\vspace{1em}
+	\noindent{\heiti 算法步骤}
+	
+	\textbf{1.} 选取初始值 \(x_0\)，误差 \(\epsilon\)，以及更新间隔 \(N\)。\\
+	\indent\textbf{2.} 初始化斜率 \(m = f'(x_0)\)。\\
+	\indent\textbf{4.} 根据公式 \(x_{k+1} = x_k - \frac{f(x_k)}{m}\) 计算下一个近似值。\\
+	\indent\textbf{5.} 判断是否满足收敛条件 \(|x_{k+1} - x_k| < \epsilon\)。若满足，则停止迭代。\\
+	\indent\textbf{6.} 如果 \((k+1) \pmod N = 0\)，则更新斜率 \(m = f'(x_{k+1})\)。\\
+	\indent\textbf{7.} 若不满足收敛条件，则令 \(x_k = x_{k+1}\)，返回第三步。
+	
+	\vspace{1em}
+	\noindent{\heiti 收敛性分析}
+	
+	收敛性介于牛顿法和简化切线法之间。更新频率 \(N\) 越小，收敛速度越快，但单步计算成本也越高。
+	
+	\vspace{1em}
+	\noindent{\heiti 优缺点}
+	
+	\textbf{·} {优点}：计算成本和收敛速度相对平衡。\\
+	\indent\textbf{·}{缺点}：需要额外设定一个更新频率参数 \(N\)，选择不当会影响效率。
+	
+	\vspace{1em}
+	\noindent{\heiti 软件示例}
+	
+	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 时的软件运行截图（详细代码见附录A）。
+	
+	\begin{figure}[h] 
+		\centering 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/5.2.png}
+			\caption{修正切线法软件运行截图1} 
+			\label{fig:5.1}
+		\end{subfigure}
+		\hfill 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/5.1.png} 
+			\caption{修正切线法软件运行截图2}
+			\label{fig:5.2}
+		\end{subfigure}
+		
+		\caption{修正切线法软件运行截图}
+		\label{fig:55} 
+	\end{figure}
+
+	
+	\subsubsection{牛顿下山法}
+	
+	\noindent{\heiti 基本思想}
+	
+	牛顿法非常依赖合适的初值，一旦选择不当就会不收敛，这也导致了其有局部收敛的特征。牛顿下山法通过引入一个下山因子\(\lambda\) 来扩大收敛范围。下山法强制要求每次迭代都必须满足“下山”条件——即 \(|f(x_{k+1})| < |f(x_k)|\)。如果标准的牛顿步长（\(\lambda=1\)）不满足此条件，就缩小步长（将 \(\lambda\) 减半）再尝试，直到满足下山条件为止。
+	
+	\vspace{1em}
+	\noindent{\heiti 数学公式}
+	
+	迭代公式为：
+	\[
+	x_{k+1} = x_k - \lambda \frac{f(x_k)}{f'(x_k)}
+	\]
+	其中 \(\lambda \in (0, 1]\) 是通过搜索选择的，以确保 \(|f(x_{k+1})| < |f(x_k)|\) 成立。
+	
+	\vspace{1em}
+	\noindent{\heiti 算法步骤}
+	
+	\textbf{1.} 选取初始值 \(x_0\) 和误差 \(\epsilon\)。\\
+	\indent\textbf{2.} 计算牛顿步 \(d_k = \frac{f(x_k)}{f'(x_k)}\)。\\
+	\indent\textbf{3.} 初始化下山因子 \(\lambda = 1\)。\\
+	\indent\textbf{4.} 计算候选点 \(x_{next} = x_k - \lambda d_k\)。\\
+	\indent\textbf{5.} 判断是否满足下山条件 \(|f(x_{next})| < |f(x_k)|\)。\\
+	\indent\textbf{6.} 若不满足，则 \(\lambda = \lambda / 2\)，返回第4步。若 \(\lambda\) 过小则认为方法失败。\\
+	\indent\textbf{7.} 若满足，则接受该点，令 \(x_{k+1} = x_{next}\)。\\
+	\indent\textbf{8.} 判断是否满足收敛条件 \(|x_{k+1} - x_k| < \epsilon\)，若满足则停止迭代，若不满足则返回第2步。
+	
+	\vspace{1em}
+	\noindent{\heiti 收敛性分析}
+	
+	下山法相比牛顿法能够更大范围的收敛。
+	
+	\vspace{1em}
+	\noindent{\heiti 优缺点}
+	
+	\textbf{·} {优点}：相比牛顿法扩大了收敛域，对初值选择不那么敏感。\\
+	\indent\textbf{·}{缺点}：算法更复杂，增加了单次迭代的计算量。
 	
 	
-	\section{迭代方法对比}
-	\label{sec:results}
 	
-	展示您的实验设置、过程和获得的结果。
+	\vspace{1em}
+	\noindent{\heiti 软件示例}
+	
+	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 时的软件运行截图（详细代码见附录A）。
+	
+	\begin{figure}[h] 
+		\centering 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/6.2.png}
+			\caption{牛顿下山法软件运行截图1} 
+			\label{fig:6.1}
+		\end{subfigure}
+		\hfill 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/6.1.png} 
+			\caption{牛顿下山法软件运行截图2}
+			\label{fig:6.2}
+		\end{subfigure}
+		
+		\caption{牛顿下山法软件运行截图}
+		\label{fig:66} 
+	\end{figure}
 	
 	
+	
+	\subsubsection{单点弦截法}
+	
+	\noindent{\heiti 基本思想}
+	
+	该方法是牛顿法的另一种近似，它使用一个固定点 \((x_0, f(x_0))\) 和当前迭代点 \((x_k, f(x_k))\) 连接形成的割线与x轴的交点，来作为下一个近似根 \(x_{k+1}\)。这等价于在牛顿法公式中用差商 \(\frac{f(x_k) - f(x_0)}{x_k - x_0}\) 来近似导数 \(f'(x_k)\)。
+	
+	\vspace{1em}
+	\noindent{\heiti 数学公式}
+	
+	迭代公式为：
+	\[
+	x_{k+1} = x_k - \frac{f(x_k)(x_k - x_0)}{f(x_k) - f(x_0)}
+	\]
+	
+	\vspace{1em}
+	\noindent{\heiti 算法步骤}
+	
+	\textbf{1.} 选取一个固定点 \(x_0\) 和一个初始迭代点 \(x_1\)，以及误差 \(\epsilon\)。\\
+	\indent\textbf{2.} 计算并存储 \(f(x_0)\)。\\
+	\indent\textbf{3.} 对于 \(k = 1, 2, \ldots\)，根据上述公式计算下一个近似值 \(x_{k+1}\)。\\
+	\indent\textbf{4.} 判断是否满足收敛条件 \(|x_{k+1} - x_k| < \epsilon\)。\\
+	\indent\textbf{5.} 若不满足，则令 \(x_k = x_{k+1}\)，返回第3步。
+	
+	\vspace{1em}
+	\noindent{\heiti 收敛性分析}
+	
+	该方法线性收敛，收敛速度通常慢于牛顿法。
+	
+	\vspace{1em}
+	\noindent{\heiti 优缺点}
+	
+	\textbf{·} {优点}：无需计算导数。\\
+	\indent\textbf{·}{缺点}：\\
+	\indent\indent\textbf{-} 收敛速度为一阶，较慢。
+	
+	
+	\vspace{1em}
+	\noindent{\heiti 软件示例}
+	
+	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 时的软件运行截图（详细代码见附录A）。
+	
+	\begin{figure}[h] 
+		\centering 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/7.2.png}
+			\caption{单点弦截法软件运行截图1} 
+			\label{fig:7.1}
+		\end{subfigure}
+		\hfill 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/7.1.png} 
+			\caption{单点弦截法软件运行截图2}
+			\label{fig:7.2}
+		\end{subfigure}
+		
+		\caption{单点弦截法软件运行截图}
+		\label{fig:77} 
+	\end{figure}
+	
+	
+	\subsubsection{双点弦截法}
+	
+	\noindent{\heiti 基本思想}
+	
+	双点弦截法是单点弦截法的一个改进，该方法使用最近的两个迭代点 \((x_{k-1}, f(x_{k-1}))\) 和 \((x_k, f(x_k))\) 来构造一条割线，并用该割线与x轴的交点作为新的近似根 \(x_{k+1}\)。
+	
+	\vspace{1em}
+	\noindent{\heiti 数学公式}
+	
+	迭代公式为：
+	\[
+	x_{k+1} = x_k - \frac{f(x_k)(x_k - x_{k-1})}{f(x_k) - f(x_{k-1})}
+	\]
+	
+	\vspace{1em}
+	\noindent{\heiti 算法步骤}
+	
+	\textbf{1.} 选取两个初始近似值 \(x_0, x_1\) 和允许误差 \(\epsilon\)。\\
+	\indent\textbf{2.} 对于 \(k = 1, 2, \ldots\)，根据迭代公式计算 \(x_{k+1}\)。\\
+	\indent\textbf{3.} 判断是否满足收敛条件 \(|x_{k+1} - x_k| < \epsilon\)。\\
+	\indent\textbf{4.} 若不满足，则更新迭代点：令 \(x_{k-1} = x_k\)，\(x_k = x_{k+1}\)，然后返回第2步。
+	
+	\vspace{1em}
+	\noindent{\heiti 收敛性分析}
+	
+	该方法具有超线性收敛性，收敛阶约为1.618。其收敛速度快于线性收敛方法，但慢于牛顿法的二阶收敛。
+	
+	\vspace{1em}
+	\noindent{\heiti 优缺点}
+	
+	\textbf{·} {优点}：无需计算导数，同时保持了较快的收敛速度。\\
+	\indent\textbf{·}{缺点}：与牛顿法一样是局部收敛的，不能保证对任意初值都收敛。
+	
+	
+	
+	\vspace{1em}
+	\noindent{\heiti 软件示例}
+	
+	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 和迭代函数\(g(x) = \sqrt[3]{x+1}\)时的软件运行截图（详细代码见附录A）。
+	
+	\begin{figure}[h] 
+		\centering 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/8.2.png}
+			\caption{双点弦截法软件运行截图1} 
+			\label{fig:8.1}
+		\end{subfigure}
+		\hfill 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/8.1.png} 
+			\caption{双点弦截法软件运行截图2}
+			\label{fig:8.2}
+		\end{subfigure}
+		
+		\caption{双点弦截法软件运行截图}
+		\label{fig:88} 
+	\end{figure}
+	
+	\subsubsection{艾特肯迭代法}
+	
+	\noindent{\heiti 基本思想}
+	
+	艾特肯法可以看作是双点弦截法的一种变形，艾特肯法利用由不动点迭代 \(x_{k+1} = g(x_k)\) 产生的一系列点来执行双点弦截法。双点弦截法的迭代公式是利用两个点 \((x_k, f(x_k))\) 和 \((x_{k+1}, f(x_{k+1}))\) 构造割线来求根：
+	\[
+	x_{new} = x_{k+1} - \frac{f(x_{k+1})(x_{k+1} - x_k)}{f(x_{k+1}) - f(x_k)}
+	\]
+	将\(x_k\)、\(x_{k+1}\)两个点代入函数 \(f(x) = x - g(x)\)，可得：
+	\begin{align*}
+		f(x_k) = x_k - g(x_k) = x_k - x_{k+1} \\
+		f(x_{k+1}) = x_{k+1} - g(x_{k+1}) = x_{k+1} - x_{k+2}
+	\end{align*}
+	现在，我们将上述结果代回双点弦截法的公式中，求出的 \(x_{new}\) 即为加速后的新迭代值 \(\hat{x}_k\):
+	\[
+	\hat{x}_k = x_{k+1} - \frac{(x_{k+1} - x_{k+2})(x_{k+1} - x_k)}{(x_{k+1} - x_{k+2}) - (x_k - x_{k+1})}
+	\]
+	对上式分母进行化简：\((x_{k+1} - x_{k+2}) - (x_k - x_{k+1}) = -(x_{k+2} - 2x_{k+1} + x_k)\)。随后我们对整个表达式进行代数变换：
+	\begin{align*}
+		\hat{x}_k &= \frac{x_{k+1}((2x_{k+1} - x_k - x_{k+2}) - (x_{k+1} - x_{k+2})) - x_k(x_{k+1}-x_{k+2})}{2x_{k+1} - x_k - x_{k+2}} \\
+		&= \frac{x_k x_{k+2} - x_{k+1}^2}{x_{k+2} - 2x_{k+1} + x_k} \\
+		&= \frac{x_k(x_{k+2} - 2x_{k+1} + x_k) - (x_k^2 - 2x_k x_{k+1} + x_{k+1}^2)}{x_{k+2} - 2x_{k+1} + x_k} \\
+		&= x_k - \frac{(x_{k+1} - x_k)^2}{x_{k+2} - 2x_{k+1} + x_k}
+	\end{align*}
+	最终得到的这个公式就是艾特肯加速法的标准形式。它利用基础迭代产生的连续三点（\(x_k, x_{k+1}, x_{k+2}\)）来构造一个收敛更快的迭代值。
+	
+	\vspace{1em}
+	\noindent{\heiti 数学公式}
+	
+	给定一个由基础迭代 \(x_{i+1}=g(x_i)\) 产生的序列，艾特肯加速序列 \(\{\hat{x}_k\}\) 的计算公式为：
+	\[
+	\hat{x}_k = x_k - \frac{(x_{k+1} - x_k)^2}{x_{k+2} - 2x_{k+1} + x_k}
+	\]
+	
+	\vspace{1em}
+	\noindent{\heiti 算法步骤}
+	
+	\textbf{1.} 选取初始值 \(x_0\) 和误差 \(\epsilon\)。\\
+	\indent\textbf{2.} 使用基础迭代公式 \(x_{i+1}=g(x_i)\) 计算两步：\(x_1 = g(x_0)\)，\(x_2 = g(x_1)\)。\\
+	\indent\textbf{3.} 使用艾特肯公式计算加速后的值 \(\hat{x}_0\)。\\
+	\indent\textbf{4.} 判断是否满足收敛条件 \(|\hat{x}_0 - x_0| < \epsilon\)。\\
+	\indent\textbf{5.} 若不满足，则令 \(x_0 = \hat{x}_0\)，返回第2步继续迭代。
+	
+	\vspace{1em}
+	\noindent{\heiti 收敛性分析}
+	
+	如果原始的不动点迭代法是线性收敛的，那么经过艾特肯法加速后形成的序列通常具有二阶收敛性。
+	
+	\vspace{1em}
+	\noindent{\heiti 优缺点}
+	
+	\textbf{·} {优点}：显著提高线性收敛迭代法的收敛速度。\\
+	\indent\textbf{·}{缺点}：\\
+	\indent\indent\textbf{-} 每次迭代的计算复杂性增加。\\
+	\indent\indent\textbf{-} 分母 \(x_{k+2} - 2x_{k+1} + x_k\) 接近于零时会出现数值不稳定问题。
+	
+	\vspace{1em}
+	\noindent{\heiti 优缺点}
+	
+	\textbf{·} {优点}：算法简单朴素，易于理解。\\
+	\indent\textbf{·}{缺点}：\\
+	\indent\indent\textbf{-} 迭代函数的构造不唯一，不同的构造方式可能导致收敛性不同，甚至发散。\\
+	\indent\indent\textbf{-} 收敛速度通常较慢，仅为一阶收敛。\\
+	\indent\indent\textbf{-} 对初值的选取比较敏感，需要选取在根附近的初值才能保证收敛。
+	
+	
+		\vspace{1em}
+	\noindent{\heiti 软件示例}
+	
+	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 和迭代函数\(g(x) = \sqrt[3]{x+1}\)时的软件运行截图（详细代码见附录A）。
+	
+	\begin{figure}[h] 
+		\centering 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/3.2.png}
+			\caption{艾特肯法软件运行截图1} 
+			\label{fig:3.1}
+		\end{subfigure}
+		\hfill 
+		\begin{subfigure}{0.48\textwidth} 
+			\centering
+			\includegraphics[width=\linewidth]{pic/3.1.png} 
+			\caption{艾特肯法软件运行截图2}
+			\label{fig:3.2}
+		\end{subfigure}
+		
+		\caption{艾特肯法软件运行截图}
+		\label{fig:33} 
+	\end{figure}
+	
+	\newpage
+	\section{java软件实现}
+	
+	\subsection{总体设计}
+	
+	我的软件采用了模型-视图-控制器（MVC）的设计模式，下方为我的软件结构图，这种模式将主要的功能解耦，在日后较易进行进一步的扩展。
+	
+	\begin{figure}
+		\centering 
+		\includegraphics[width=0.8\textwidth]{pic/1.png} 
+		\caption{软件的MVC架构图} % 图片的标题
+		\label{fig:mvc-diagram} % 为图片设置一个标签，用于在正文中引用
+	\end{figure}
+	
+	\subsubsection{模型}
+	模型层 (Model)存储了8种不同迭代策略，是运行的核心部分，主要包含下面内容：\\
+	\indent\textbf{·}\texttt{Equation} 类：负责解析用户输入的函数。\\
+	\indent\textbf{·}\texttt{IterativeMethod} 接口：定义了迭代方法的规范。\\
+	\indent\textbf{·}\texttt{MethodIterator} 类：采用迭代器模式，用于管理和执行分步迭代过程。\\
+	\indent\textbf{·}\texttt{IterationState} 记录：用于封装单次迭代计算后的状态信息。
+	
+	\subsubsection{视图}
+	视图 (View)主要负责向用户呈现内容，包含以下部分：\\
+	\indent\textbf{·}\textbf{控制面板}: 位于界面顶部，包含用于输入方程、选择迭代方法、设置初始值等控件。\\
+	\indent\textbf{·}\textbf{可视化面板}: 界面中心区域，由两个绘图控件组成。\\
+	\indent\textbf{·}\textbf{日志面板}: 位于界面右侧，实时显示每一次迭代的详细数值结果。
+	
+	\subsubsection{控制器}
+	控制器 (Controller)连接视图和模型，是管理软件行为的角色。\\
+	\indent\textbf{·}\textbf{事件处理}: 监听视图层控件触发的事件。\\
+	\indent\textbf{·}\textbf{任务调度}: 调用模型层的对象执行核心计算任务。\\
+	\indent\textbf{·}\textbf{视图更新}:调用视图层的相应方法来更新界面显示。\\
+	通过这种方式，MVC架构确保了各部分的职责单一和明确，使得整个软件结构清晰，易于理解和维护。
+	
+	
+	
+	\subsection{核心功能实现}
+	
+	\subsubsection{函数字符串识别}
+	
+	
+	
+	\subsubsection{迭代功能实现}
+	
+	
+	\subsection{软件界面介绍}
+	
+	\newpage
 	\section{总结}
-	\label{sec:conclusion}
 	
-	总结您的工作，并指出未来的研究方向。
+	\subsection{工作总结}
+	
+	
+	
+	\subsection{展望}
+	
 	
 	
 	
@@ -296,17 +921,235 @@ sorting=none         % 按引用顺序排序
 	\markboth{附录}{}
 	
 	
-	\section{高斯-赛德尔迭代法MATLAB代码}
-	\label{app:code}
+	\section{迭代部分完整代码}
+	\markboth{附录}{}
 	
-	这里是附录A的内容...
+	\subsubsection*{普通迭代法}
+	
+	\begin{lstlisting}[language=Java, caption={普通迭代法单步迭代核心逻辑}, label={lst:normal-java}]
+		if (k == 0) {
+			double fx0 = equation.getF().apply(x_curr);
+			IterationState initialState = IterationState.initial(x_curr, fx0);
+			x_prev = x_curr;
+			k++;
+			return initialState;
+		}
+		// --- 执行一次普通迭代 ---
+		x_curr = equation.getG().apply(x_prev);
+	\end{lstlisting}
+	
+	\subsubsection*{牛顿迭代法}
+	
+	\begin{lstlisting}[language=Java, caption={牛顿迭代法单步迭代核心逻辑}, label={lst:newton-java}]
+		if (k == 0) {
+			double fx0 = equation.getF().apply(x_curr);
+			IterationState initialState = IterationState.initial(x_curr, fx0);
+			x_prev = x_curr;
+			k++;
+			return initialState;
+		}
+		// --- 执行一次牛顿法迭代 ---
+		double fx = equation.getF().apply(x_prev);
+		double dfx = equation.getDf().apply(x_prev);
+		
+		if (Math.abs(dfx) < 1e-12) {
+			x_curr = Double.NaN;
+		} else {
+			x_curr = x_prev - fx / dfx;
+		}
+	\end{lstlisting}
+	
+	\subsubsection*{简化切线法}
+	
+	\begin{lstlisting}[language=Java, caption={简化切线法单步迭代核心逻辑}, label={lst:SimplifiedNewton-java}]
+		if (k == 0) {
+			double fx0 = equation.getF().apply(x_curr);
+			IterationState initialState = IterationState.initial(x_curr, fx0);
+			x_prev = x_curr;
+			k++;
+			return initialState;
+		}
+		// --- 执行一次简化切线法迭代 ---
+		x_curr = x_prev - equation.getF().apply(x_prev) / dfx0;
+	\end{lstlisting}
+	
+	\subsubsection*{修正切线法}
+	
+	\begin{lstlisting}[language=Java, caption={修正切线法单步迭代核心逻辑}, label={lst:modified-java}]
+		if (k == 0) {
+			double fx0 = equation.getF().apply(x_curr);
+			IterationState initialState = IterationState.initial(x_curr, fx0);
+			x_prev = x_curr;
+			k++;
+			return initialState;
+		}
+		
+		double fx = equation.getF().apply(x_prev);
+		
+		if (k == 1 || (k - 1) % this.updateInterval == 0) {
+			this.derivative_approx = (equation.getF().apply(x_prev + H) - fx) / H;
+		}
+		// --- 执行一次修正切线法迭代 ---
+		if (Math.abs(this.derivative_approx) < 1e-12) {
+			x_curr = Double.NaN;
+		} else {
+			x_curr = x_prev - fx / this.derivative_approx;
+		}
+	\end{lstlisting}
+	
+	\newpage
+	
+	\subsubsection*{单点弦截法}
 	
 	
-	\section{实验原始数据记录}
-	\label{app:data}
+	\begin{lstlisting}[language=Java, caption={单点弦截法单步迭代核心逻辑}, label={lst:single-java}]
+		if (k == 1) {
+			double error_abs = Math.abs(x_curr - x_prev);
+			IterationState firstState = new IterationState(k, x_curr, x_prev, equation.getF().apply(x_curr), error_abs, Double.NaN);
+			x_prev_prev = x_prev;
+			x_prev = x_curr;
+			k++;
+			return firstState;
+		}
+		// --- 执行一次单点割线法迭代 ---
+		double fx_prev = equation.getF().apply(x_prev);
+		double denominator = fx_prev - fx_fixed;
+		
+		if (Math.abs(denominator) < 1e-12) {
+			x_curr = Double.NaN; 
+		} else {
+			x_curr = x_prev - fx_prev * (x_prev - x_fixed) / denominator;
+		}
+	\end{lstlisting}
 	
-	这里是附录B的内容...
+	\subsubsection*{双点弦截法}
 	
-	这里是附录A的内容。
+	\begin{lstlisting}[language=Java, caption={双点弦截法单步迭代核心逻辑}, label={lst:double-java}]
+		if (k == 0) {
+			k++;
+			return IterationState.initial(x_old, equation.getF().apply(x_old));
+		}
+		if (k == 1) {
+			double error_abs = Math.abs(x_curr - x_old);
+			IterationState state = new IterationState(k, x_curr, x_old, equation.getF().apply(x_curr), error_abs, Double.NaN);
+			x_older = x_old;
+			x_old = x_curr;
+			k++;
+			return state;
+		}
+		// --- 执行一次双点割线法迭代 ---
+		double fx_old = equation.getF().apply(x_old);
+		double fx_older = equation.getF().apply(x_older);
+		double denominator = fx_old - fx_older;
+		
+		if (Math.abs(denominator) < 1e-12) {
+			x_curr = Double.NaN;
+		} else {
+			x_curr = x_old - fx_old * (x_old - x_older) / denominator;
+		}
+	\end{lstlisting}
+
+	\subsubsection*{艾特肯迭代法}
+	
+	\begin{lstlisting}[language=Java, caption={艾特肯迭代法单步迭代核心逻辑}, label={lst:aitken-java}]
+		if (k == 0) {
+			double fx0 = equation.getF().apply(x_curr);
+			IterationState initialState = IterationState.initial(x_curr, fx0);
+			x_prev = x_curr; 
+			k++;
+			return initialState;
+		}
+		
+		// --- 执行一次艾特肯加速迭代 ---
+		double x0_k = x_prev;
+		double x1_k = g.apply(x0_k);
+		double x2_k = g.apply(x1_k);
+		
+		double denominator = x2_k - 2 * x1_k + x0_k;
+		if (Math.abs(denominator) < 1e-12) {
+			x_curr = Double.NaN; 
+		} else {
+			x_curr = x0_k - Math.pow(x1_k - x0_k, 2) / denominator;
+		}
+	\end{lstlisting}
+	
+	\subsubsection*{牛顿下山法}
+	
+	\begin{lstlisting}[language=Java, caption={牛顿下山法单步迭代核心逻辑}, label={lst:dampedNewton-java}]
+		if (k == 0) {
+			double fx0 = equation.getF().apply(x_curr);
+			IterationState initialState = IterationState.initial(x_curr, fx0);
+			x_prev = x_curr;
+			k++;
+			return initialState;
+		}
+		
+		// --- 执行一次下山法迭代 ---
+		double fx_prev = equation.getF().apply(x_prev);
+		double dfx_prev = equation.getDf().apply(x_prev);
+		
+		if (Math.abs(dfx_prev) < 1e-12) {
+			x_curr = Double.NaN; 
+		} else {
+			double lambda = 1.0;
+			int maxTries = 10;
+			boolean found = false;
+			while (maxTries-- > 0) {
+				double x_next_candidate = x_prev - lambda * (fx_prev / dfx_prev);
+				if (Math.abs(equation.getF().apply(x_next_candidate)) < Math.abs(fx_prev)) {
+					x_curr = x_next_candidate;
+					found = true;
+					break;
+				}
+				lambda /= 2.0;
+			}
+			if (!found) {
+				x_curr = Double.NaN; 
+			}
+		}
+	\end{lstlisting}
+	
+	\section{函数识别部分完整代码}
+	\markboth{附录}{}
+	
+	\begin{lstlisting}[language=Java, caption={函数识别核心逻辑}, label={lst:dampedNewton-java}]
+		public class Equation {
+			
+			private final Expression f, g;
+			private static final double H = 1e-7; // 微分小步长
+			
+			// 构造函数
+			public Equation(String fStr, String gStr) {
+				this.f = new ExpressionBuilder(fStr).variable("x").build();
+				if (gStr != null && !gStr.isBlank()) {
+					this.g = new ExpressionBuilder(gStr).variable("x").build();
+				} else {
+					this.g = new ExpressionBuilder("0/0").variable("x").build(); 
+				}
+			}
+			
+			public Function<Double, Double> getF() {
+				return (x) -> f.setVariable("x", x).evaluate();
+			}
+			
+			public Function<Double, Double> getG() {
+				return (x) -> g.setVariable("x", x).evaluate();
+			}
+			
+			// 计算导数
+			public Function<Double, Double> getDf() {
+				// 使用中心差分公式: (f(x+h) - f(x-h)) / (2h)
+				return (x) -> {
+					try {
+						double f_x_plus_h = f.setVariable("x", x + H).evaluate();
+						double f_x_minus_h = f.setVariable("x", x - H).evaluate();
+						return (f_x_plus_h - f_x_minus_h) / (2 * H);
+					} catch (Exception e) {
+						return Double.NaN;
+					}
+				};
+			}
+		}
+	\end{lstlisting}
 	
 \end{document}
