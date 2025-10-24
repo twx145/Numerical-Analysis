@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.twx</groupId>
-    <artifactId>Numerical-Analysis-Chapter-2</artifactId>
+    <artifactId>Numerical-Analysis</artifactId>
     <version>1.0.1</version>
 
 <properties>
@@ -87,7 +87,7 @@
                     <id>default-cli</id>
                     <configuration>
                         <!-- 你的主应用程序类 -->
-                        <mainClass>com.twx.iterative_methods.MainApp</mainClass>
+                        <mainClass>com.twx.MainApplication</mainClass>
                     </configuration>
                 </execution>
             </executions>
@@ -105,7 +105,7 @@
                     </goals>
                     <configuration>
 
-                        <mainClass>com.twx.iterative_methods.Main</mainClass>
+                        <mainClass>com.twx.Main</mainClass>
 
                         <bundleJre>true</bundleJre>
                         <generateInstaller>false</generateInstaller>

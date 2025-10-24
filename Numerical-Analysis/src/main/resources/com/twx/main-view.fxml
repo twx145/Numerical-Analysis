@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.twx.MainViewController">
+    <top>
+        <!-- 添加 styleClass 来应用顶部模块切换栏的样式 -->
+        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="module-switcher-bar">
+            <padding>
+                <Insets top="8" right="15" bottom="8" left="15"/>
+            </padding>
+            <Label text="选择功能模块:"/>
+            <ChoiceBox fx:id="moduleChooser"/>
+        </HBox>
+    </top>
+    <center>
+        <!-- 内容将由 Controller 动态加载到这里 -->
+        <BorderPane fx:id="contentPane"/>
+    </center>
+</BorderPane>

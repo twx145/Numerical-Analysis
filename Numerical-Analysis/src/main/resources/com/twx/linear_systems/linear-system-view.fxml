@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.twx.linear_systems.controller.LinearSystemController">
+    <top>
+        <VBox alignment="CENTER" spacing="10" styleClass="control-panel">
+            <Label text="线性方程组求解 Ax = b" styleClass="header-label"/>
+            <HBox alignment="CENTER" spacing="15">
+                <Label text="矩阵大小:"/>
+                <Spinner fx:id="sizeSpinner" prefWidth="60"/>
+
+                <!-- NEW: 两级选择 ComboBox -->
+                <Label text="解法类型:"/>
+                <ComboBox fx:id="methodTypeComboBox" prefWidth="120"/>
+                <Label text="具体方法:"/>
+                <ComboBox fx:id="specificMethodComboBox" prefWidth="180"/>
+
+                <Button fx:id="resetButton" text="开始/重置"/>
+                <Button fx:id="nextStepButton" text="下一步" disable="true"/>
+            </HBox>
+        </VBox>
+    </top>
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <VBox spacing="15" alignment="TOP_CENTER">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <Label text="输入增广矩阵 [A | b]" styleClass="sub-header-label"/>
+                <GridPane fx:id="matrixInputGrid" hgap="5" vgap="5" styleClass="matrix-input-grid"/>
+                <Separator/>
+                <Label text="求解过程可视化" styleClass="sub-header-label"/>
+                <StackPane fx:id="visualisationPane" styleClass="visualization-pane" alignment="TOP_CENTER"/>
+                <Separator/>
+                <Label text="日志与结果" styleClass="sub-header-label"/>
+                <TextArea fx:id="logArea" editable="false" wrapText="true" prefHeight="200"
+                          style="-fx-font-family: 'monospaced';"/>
+            </VBox>
+        </ScrollPane>
+    </center>
+</BorderPane>

@@ -1,0 +1,170 @@
+/* =================================================================
+   Main Stylesheet - Theme: Nordic Light
+   ================================================================= */
+
+/* --- 1. Root Variables & Global Styles --- */
+
+.root {
+    /* Color Palette */
+    -fx-primary-color: #5E81AC; /* A calm blue */
+    -fx-primary-hover-color: #4C6A8D; /* A darker shade of the blue */
+    -fx-accent-color: #88C0D0; /* A lighter, brighter blue for highlights */
+    -fx-background-light: #ECEFF4; /* Very light gray page background */
+    -fx-background-content: #FFFFFF; /* Pure white for content areas */
+    -fx-text-dark: #2E3440; /* A dark, almost-black for text */
+    -fx-text-light: #FFFFFF; /* Pure white for text on dark backgrounds */
+    -fx-border-light: #D8DEE9; /* Light gray for borders */
+    -fx-border-focused: #5E81AC; /* Primary blue for focused borders */
+    -fx-error-color: #BF616A; /* A soft red for errors or warnings */
+
+    /* Font Families */
+    -fx-font-family-ui: "Microsoft YaHei", "Segoe UI", "Helvetica Neue", sans-serif;
+    -fx-font-family-data: "Consolas", "Monaco", "Monospaced";
+}
+
+.root {
+    -fx-background-color: -fx-background-light;
+    -fx-font-family: -fx-font-family-ui;
+}
+
+
+/* --- 2. Main Application Frame Styles --- */
+
+/* The top bar in main-view.fxml for switching modules */
+.module-switcher-bar {
+    -fx-background-color: -fx-background-content;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: -fx-border-light;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);
+}
+
+.module-switcher-bar .label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-dark;
+}
+
+
+/* --- 3. Generic Control Styles --- */
+
+.control-panel {
+    -fx-background-color: -fx-background-content;
+    -fx-padding: 20px 30px;
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: -fx-border-light;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 2);
+}
+
+.button {
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: -fx-text-light;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px 18px;
+    -fx-cursor: hand;
+    -fx-transition: -fx-background-color 0.2s ease-in-out;
+}
+.button:hover { -fx-background-color: -fx-primary-hover-color; }
+.button:disabled { -fx-background-color: #A0B3C7; -fx-opacity: 0.8; -fx-cursor: default; }
+
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-text-dark;
+}
+
+.text-field, .combo-box-base, .spinner {
+    -fx-background-color: -fx-background-content;
+    -fx-text-fill: -fx-text-dark;
+    -fx-prompt-text-fill: #9099A9;
+    -fx-font-size: 14px;
+    -fx-background-radius: 8px;
+    -fx-border-color: -fx-border-light;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 4px 8px;
+    -fx-transition: -fx-border-color 0.2s ease-in-out;
+}
+.text-field:focused, .combo-box-base:focused, .spinner:focused {
+    -fx-border-color: -fx-border-focused;
+    -fx-border-width: 2px;
+}
+
+.combo-box .arrow-button .arrow { -fx-background-color: -fx-primary-color; }
+.combo-box .list-cell { -fx-font-family: -fx-font-family-ui; -fx-font-size: 14px; -fx-background-color: transparent; -fx-text-fill: -fx-text-dark; -fx-padding: 8px; }
+.combo-box-popup .list-view { -fx-background-color: -fx-background-content; -fx-border-color: -fx-border-light; -fx-border-radius: 8px; }
+.combo-box .list-cell:hover { -fx-background-color: -fx-primary-hover-color; -fx-text-fill: -fx-text-light; }
+
+/* Spinner arrow buttons styling */
+.spinner .increment-arrow-button, .spinner .decrement-arrow-button {
+    -fx-background-color: -fx-background-light;
+    -fx-background-radius: 4px;
+}
+.spinner .increment-arrow-button:hover, .spinner .decrement-arrow-button:hover {
+    -fx-background-color: #E5E9F0;
+}
+.spinner .increment-arrow-button .arrow, .spinner .decrement-arrow-button .arrow {
+    -fx-background-color: -fx-primary-color;
+}
+
+.text-area { -fx-background-color: -fx-background-content; -fx-font-family: -fx-font-family-data; -fx-font-size: 13px; -fx-border-color: -fx-border-light; -fx-border-radius: 8px; -fx-text-fill: -fx-text-dark; }
+.text-area .content { -fx-background-color: -fx-background-content; -fx-background-radius: 8px; }
+
+.scroll-bar:vertical .thumb, .scroll-bar:horizontal .thumb { -fx-background-color: #D8DEE9; -fx-background-radius: 4px; }
+.scroll-bar:vertical .thumb:hover, .scroll-bar:horizontal .thumb:hover { -fx-background-color: #C8CDD6; }
+.scroll-bar .track { -fx-background-color: transparent; }
+
+.split-pane-divider { -fx-background-color: #E5E9F0; -fx-padding: 0 1px 0 1px; }
+.split-pane-divider:hover { -fx-background-color: #D8DEE9; }
+
+/* --- 4. Component-Specific Styles --- */
+
+/* Tab Pane for Linear Systems module */
+.tab-pane { -fx-tab-min-width: 100px; }
+.tab-pane .tab-header-area .tab-header-background { -fx-background-color: -fx-background-light; }
+.tab { -fx-background-color: #E5E9F0; -fx-padding: 8px 20px; -fx-focus-color: transparent; -fx-background-insets: 0; }
+.tab:selected { -fx-background-color: -fx-background-content; -fx-border-color: -fx-border-light; -fx-border-width: 1px 1px 0 1px; }
+.tab .tab-label { -fx-font-size: 14px; -fx-text-fill: -fx-text-dark; }
+.tab:selected .tab-label { -fx-font-weight: bold; }
+
+/* --- 5. Custom Layout & Utility Classes --- */
+
+/* Header labels */
+.header-label { -fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: -fx-text-dark; }
+.sub-header-label { -fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: -fx-text-dark; }
+
+/* For the visualization area in linear_systems_view.fxml */
+.visualization-pane {
+    -fx-background-color: -fx-background-content;
+    -fx-border-color: -fx-border-light;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 10px;
+}
+
+/* For the Matrix Input GridPane in linear_systems_view.fxml */
+.matrix-input-grid {
+    -fx-padding: 15px;
+    -fx-background-color: #F8F9FB; /* A slightly different background */
+    -fx-border-color: -fx-border-light;
+    -fx-border-radius: 8px;
+}
+
+/* For the separator label "|" in the matrix input */
+.matrix-separator-label {
+    -fx-font-size: 18px;
+    -fx-text-fill: #A0B3C7;
+    -fx-padding: 0 5px;
+}
+
+/* For the labels inside MatrixView.java */
+.matrix-view .label {
+    -fx-alignment: center;
+    -fx-min-width: 60px;
+    -fx-padding: 8px;
+    -fx-font-family: -fx-font-family-data;
+    -fx-font-size: 14px;
+    -fx-background-color: -fx-background-content;
+    -fx-border-color: -fx-border-light;
+    -fx-border-radius: 4px;
+}
