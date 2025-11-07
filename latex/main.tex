@@ -141,7 +141,6 @@ sorting=none         % 按引用顺序排序
 % 3. 文档正文开始
 % ========================================================
 
-
 \begin{document}
 	
 	% --- 详细封面页 ---
@@ -477,7 +476,7 @@ sorting=none         % 按引用顺序排序
 	
 	牛顿法需要在每次迭代时都计算导数 \(f'(x_k)\)，当导数函数 \(f'(x)\) 的形式复杂时，会出现计算量大、耗时等问题。简化切线法因此诞生。该方法只在初始点 \(x_0\) 计算一次导数 \(f'(x_0)\)，并在后续的所有迭代中都使用这个固定的斜率来代替牛顿迭代法种变化的 \(f'(x_k)\)。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 数学公式}
 	
 	迭代公式为：
@@ -485,7 +484,7 @@ sorting=none         % 按引用顺序排序
 		x_{k+1} = x_k - \frac{f(x_k)}{f'(x_0)}
 	\end{equation}
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 算法步骤}
 	
 	\textbf{1.} 选取一个初始近似值 \(x_0\) 和一个允许误差 \(\epsilon\)。\\
@@ -494,12 +493,12 @@ sorting=none         % 按引用顺序排序
 	\indent\textbf{4.} 判断是否满足收敛条件 \(|x_{k+1} - x_k| < \epsilon\)。若满足，则停止迭代。\\
 	\indent\textbf{5.} 若不满足，则令 \(x_k = x_{k+1}\)，返回第3步。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 收敛性分析}
 	
 	该方法线性收敛，收敛速度慢于牛顿法。当初始值 \(x_0\) 离根足够近并且在根的邻域内满足条件 \(|1 - f'(x)/f'(x_0)| < 1\)，该方法是收敛的。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 优缺点}
 	
 	\textbf{·} {优点}：极大地减少了计算量（只计算一次导数）。\\
@@ -507,21 +506,22 @@ sorting=none         % 按引用顺序排序
 	\indent\indent\textbf{-} 收敛速度从牛顿法的二阶下降到一阶，收敛速度变慢。\\
 	\indent\indent\textbf{-} 对初始值的选取较为敏感。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 软件示例}
 	
-	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 时的软件运行截图（详细代码见附录A）。
+	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 时的软件运行截图。
 	
 	\begin{figure}[h] 
 		\centering 
-		\begin{subfigure}{0.48\textwidth} 
+		\begin{subfigure}{0.42\textwidth} 
 			\centering
 			\includegraphics[width=\linewidth]{pic/4.2.png}
 			\caption{简化切线法软件运行截图1} 
 			\label{fig:4.1}
+			
 		\end{subfigure}
-		\hfill 
-		\begin{subfigure}{0.48\textwidth} 
+		\hfill
+		\begin{subfigure}{0.42\textwidth} 
 			\centering
 			\includegraphics[width=\linewidth]{pic/4.1.png} 
 			\caption{简化切线法软件运行截图2}
@@ -538,7 +538,7 @@ sorting=none         % 按引用顺序排序
 	
 	修正切线法是牛顿法和简化切线法的一种折中方案。这种方法会定期执行一次导数计算，这既避免了牛顿法多次大量的导数计算又增加了简化切线法的收敛速度，在计算效率和收敛速度上取得了平衡。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 数学公式}
 	
 	迭代公式为：
@@ -547,7 +547,7 @@ sorting=none         % 按引用顺序排序
 	\end{equation}
 	其中斜率 \(m_j\) 会定期更新。这里我的程序设置了一个更新间隔 \(N\)，当迭代次数 \(k\) 是 \(N\) 的倍数时才更新斜率 \(m_j = f'(x_k)\) 。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 算法步骤}
 	
 	\textbf{1.} 选取初始值 \(x_0\)，误差 \(\epsilon\)，以及更新间隔 \(N\)。\\
@@ -557,32 +557,32 @@ sorting=none         % 按引用顺序排序
 	\indent\textbf{6.} 如果 \((k+1) \pmod N = 0\)，则更新斜率 \(m = f'(x_{k+1})\)。\\
 	\indent\textbf{7.} 若不满足收敛条件，则令 \(x_k = x_{k+1}\)，返回第三步。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 收敛性分析}
 	
 	收敛性介于牛顿法和简化切线法之间。更新频率 \(N\) 越小，收敛速度越快，但单步计算成本也越高。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 优缺点}
 	
 	\textbf{·} {优点}：计算成本和收敛速度相对平衡。\\
 	\indent\textbf{·}{缺点}：需要额外设定一个更新频率参数 \(N\)，选择不当会影响效率。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 软件示例}
 	
-	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 时的软件运行截图（详细代码见附录A）。
+	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 时的软件运行截图。
 	
 	\begin{figure}[h] 
 		\centering 
-		\begin{subfigure}{0.48\textwidth} 
+		\begin{subfigure}{0.42\textwidth} 
 			\centering
 			\includegraphics[width=\linewidth]{pic/5.2.png}
 			\caption{修正切线法软件运行截图1} 
 			\label{fig:5.1}
 		\end{subfigure}
 		\hfill 
-		\begin{subfigure}{0.48\textwidth} 
+		\begin{subfigure}{0.42\textwidth} 
 			\centering
 			\includegraphics[width=\linewidth]{pic/5.1.png} 
 			\caption{修正切线法软件运行截图2}
@@ -600,16 +600,16 @@ sorting=none         % 按引用顺序排序
 	
 	牛顿法非常依赖合适的初值，一旦选择不当就会不收敛，这也导致了其有局部收敛的特征。牛顿下山法通过引入一个下山因子\(\lambda\) 来扩大收敛范围。下山法强制要求每次迭代都必须满足“下山”条件——即 \(|f(x_{k+1})| < |f(x_k)|\)。如果标准的牛顿步长（\(\lambda=1\)）不满足此条件，就缩小步长（将 \(\lambda\) 减半）再尝试，直到满足下山条件为止。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 数学公式}
 	
 	迭代公式为：
 	\begin{equation}
 		x_{k+1} = x_k - \lambda \frac{f(x_k)}{f'(x_k)}
 	\end{equation}
-	其中 \(\lambda \in (0, 1]\) 是通过搜索选择的，以确保 \(|f(x_{k+1})| < |f(x_k)|\) 成立。
 	
-	\vspace{1em}
+	
+	\vspace{0.5em}
 	\noindent{\heiti 算法步骤}
 	
 	\textbf{1.} 选取初始值 \(x_0\) 和误差 \(\epsilon\)。\\
@@ -619,14 +619,14 @@ sorting=none         % 按引用顺序排序
 	\indent\textbf{5.} 判断是否满足下山条件 \(|f(x_{next})| < |f(x_k)|\)。\\
 	\indent\textbf{6.} 若不满足，则 \(\lambda = \lambda / 2\)，返回第4步。若 \(\lambda\) 过小则认为方法失败。\\
 	\indent\textbf{7.} 若满足，则接受该点，令 \(x_{k+1} = x_{next}\)。\\
-	\indent\textbf{8.} 判断是否满足收敛条件 \(|x_{k+1} - x_k| < \epsilon\)，若满足则停止迭代，若不满足则返回第2步。
+	\indent\textbf{8.} 判断是否满足收敛条件 \(|x_{k+1} - x_k| < \epsilon\)，若满足则停止迭代否则返回第2步。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 收敛性分析}
 	
 	下山法相比牛顿法能够更大范围的收敛。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 优缺点}
 	
 	\textbf{·} {优点}：相比牛顿法扩大了收敛域，对初值选择不那么敏感。\\
@@ -634,21 +634,21 @@ sorting=none         % 按引用顺序排序
 	
 	
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 软件示例}
 	
-	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 时的软件运行截图（详细代码见附录A）。
+	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 时的软件运行截图。
 	
 	\begin{figure}[h] 
 		\centering 
-		\begin{subfigure}{0.48\textwidth} 
+		\begin{subfigure}{0.42\textwidth} 
 			\centering
 			\includegraphics[width=\linewidth]{pic/6.2.png}
 			\caption{牛顿下山法软件运行截图1} 
 			\label{fig:6.1}
 		\end{subfigure}
 		\hfill 
-		\begin{subfigure}{0.48\textwidth} 
+		\begin{subfigure}{0.42\textwidth} 
 			\centering
 			\includegraphics[width=\linewidth]{pic/6.1.png} 
 			\caption{牛顿下山法软件运行截图2}
@@ -667,7 +667,7 @@ sorting=none         % 按引用顺序排序
 	
 	该方法是牛顿法的另一种近似，它使用一个固定点 \((x_0, f(x_0))\) 和当前迭代点 \((x_k, f(x_k))\) 连接形成的割线与x轴的交点，来作为下一个近似根 \(x_{k+1}\)。这等价于在牛顿法公式中用差商 \(\frac{f(x_k) - f(x_0)}{x_k - x_0}\) 来近似导数 \(f'(x_k)\)。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 数学公式}
 	
 	迭代公式为：
@@ -675,7 +675,7 @@ sorting=none         % 按引用顺序排序
 		x_{k+1} = x_k - \frac{f(x_k)(x_k - x_0)}{f(x_k) - f(x_0)}
 	\end{equation}
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 算法步骤}
 	
 	\textbf{1.} 选取一个固定点 \(x_0\) 和一个初始迭代点 \(x_1\)，以及误差 \(\epsilon\)。\\
@@ -684,12 +684,12 @@ sorting=none         % 按引用顺序排序
 	\indent\textbf{4.} 判断是否满足收敛条件 \(|x_{k+1} - x_k| < \epsilon\)。\\
 	\indent\textbf{5.} 若不满足，则令 \(x_k = x_{k+1}\)，返回第3步。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 收敛性分析}
 	
 	该方法线性收敛，收敛速度通常慢于牛顿法。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 优缺点}
 	
 	\textbf{·} {优点}：无需计算导数。\\
@@ -697,21 +697,21 @@ sorting=none         % 按引用顺序排序
 	\indent\indent\textbf{-} 收敛速度为一阶，较慢。
 	
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 软件示例}
 	
 	下图展示了我们选择原始函数\(f(x) = x^3 - x - 1\) 时的软件运行截图（详细代码见附录A）。
 	
 	\begin{figure}[h] 
 		\centering 
-		\begin{subfigure}{0.48\textwidth} 
+		\begin{subfigure}{0.42\textwidth} 
 			\centering
 			\includegraphics[width=\linewidth]{pic/7.2.png}
 			\caption{单点弦截法软件运行截图1} 
 			\label{fig:7.1}
 		\end{subfigure}
 		\hfill 
-		\begin{subfigure}{0.48\textwidth} 
+		\begin{subfigure}{0.42\textwidth} 
 			\centering
 			\includegraphics[width=\linewidth]{pic/7.1.png} 
 			\caption{单点弦截法软件运行截图2}
@@ -869,6 +869,7 @@ sorting=none         % 按引用顺序排序
 		\label{fig:33} 
 	\end{figure}
 	
+	\newpage
 	\section{线性方程组的直接解法}
 	
 	\subsection{消元法综述}
@@ -905,18 +906,16 @@ sorting=none         % 按引用顺序排序
 	\indent\textbf{·} {一方程乘以非零数 \(k\) 解不变}\\
 	\indent\textbf{·} {一方程乘以数 \(k\) 加上另一方程，解不变}
 	
-	这三种变换对应于对增广矩阵的初等行变换
 	
 	\subsubsection{消元法步骤}
 	
 	\textbf{·} {\textbf{消元}}\\
 	\indent\indent\textbf{-} 将线性方程组写成增广矩阵的形式。\\
 	\indent\indent\textbf{-} 通过一系列的初等行变换(在上文中提及，教材中采用l作为每一行需要除的分母，以此完成行变换)，从第一列开始，逐列将主元下方的元素变为零。\\
-	\indent\indent\textbf{-}重复执行第二步直到矩阵变为上三角矩阵。\\
+	\indent\indent\textbf{-}重复执行第二步直到矩阵变为上三角矩阵。
 	
 	\indent\textbf{·} {\textbf{回代}}\\
-	\indent\indent\textbf{-} 从阶梯形矩阵的最后一行开始，该行只包含一个未知数，可以直接求解。\\
-	\indent\indent\textbf{-} 将求得的解代入倒数第二行，解出另一个未知数。\\
+	\indent\indent\textbf{-} 从阶梯形矩阵的最后一行开始（该行可以直接求解）。将求得的解代入上一行，解出另一个未知数。\\
 	\indent\indent\textbf{-}依次向上回代，直到求出所有未知数的解。
 	
 	\subsubsection{优缺点}
@@ -928,7 +927,6 @@ sorting=none         % 按引用顺序排序
 
 	\subsection{详细消元法}
 	
-	下面我会简单的介绍一下各个消元法并展示我程序的求解图片，相关的完整代码在附录B中。
 	
 	\subsubsection{高斯消元法}
 	
@@ -936,9 +934,8 @@ sorting=none         % 按引用顺序排序
 	
 	高斯消元法在每次消元的时候本行不做处理，即当前行保持原始状态，不会同下面即将要说的克劳特消元法一样进行对角元归一。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 矩阵变换公式}
-	
 	\begin{equation}
 		[A|\mathbf{b}] =
 		\left[
@@ -959,13 +956,12 @@ sorting=none         % 按引用顺序排序
 		\right]
 	\end{equation}
 	
-	\newpage
 	\noindent{\heiti 收敛性}
 	
 	\indent\textbf{-} 在没有舍入误差且对角元不为0的理想情况下，高斯消元法总能通过有限步运算得到精确解。\\
-	\indent\textbf{-} 当当前步的对角线元素为0或绝对值很小时，会导致计算产生巨大的舍入误差，使得算法非常不稳定。
+	\indent\textbf{-} 对角线元素为0或绝对值很小时，会导致计算产生巨大的舍入误差。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 程序运行截图}
 	
 	下图为程序在利用高斯消元法求解线性方程组时的截图，详细代码见附录B。
@@ -974,22 +970,22 @@ sorting=none         % 按引用顺序排序
 		\centering % 整体居中
 		
 		% --- 第一行图片 ---
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/gs (4).png}
 		\end{subfigure}
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/gs (1).png}
 		\end{subfigure}
 		
 		
 		% --- 第二行图片 ---
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/gs (2).png}
 		\end{subfigure}
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/gs (3).png}
 		\end{subfigure}
@@ -1005,7 +1001,7 @@ sorting=none         % 按引用顺序排序
 	
 	克劳特消元法在每次进行消元的时候会首先将本行的对角元素进行除法，使得对角元素值为1。这样在得到上三角矩阵后方便进行回代操作。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 矩阵变换公式}
 	
 	\begin{equation}
@@ -1028,12 +1024,12 @@ sorting=none         % 按引用顺序排序
 		\right]
 	\end{equation}
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 收敛性}
 	
 	\indent\textbf{-} 与高斯消元法类似，克劳特法同样存在数值不稳定的问题。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 程序运行截图}
 	
 	下图为程序在利用克劳特消元法求解线性方程组时的截图，详细代码见附录B。
@@ -1042,22 +1038,22 @@ sorting=none         % 按引用顺序排序
 		\centering % 整体居中
 		
 		% --- 第一行图片 ---
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/klt (1).png}
 		\end{subfigure}
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/klt (2).png}
 		\end{subfigure}
 		
 		
 		% --- 第二行图片 ---
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/klt (3).png}
 		\end{subfigure}
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/klt (4).png}
 		\end{subfigure}
@@ -1066,13 +1062,14 @@ sorting=none         % 按引用顺序排序
 		\label{fig:klt}
 	\end{figure}
 	
+	\newpage
 	\subsubsection{高斯列主元素消元法}
 	
 	\noindent{\heiti 介绍}
 	
 	该方法总体思路与高斯消元法一致，只是在对每行处理的时候都会遍历该行对角元素所在的列并把找到的最大元素所在的行与当前行进行交换，保证当前行对角元素最大。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 矩阵变换公式}
 	
 	\begin{equation}
@@ -1087,14 +1084,14 @@ sorting=none         % 按引用顺序排序
 		\right]
 	\end{equation}
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 收敛性}
 	
 	\textbf{-} 通过选取较大的主元，可以有效避免除以一个很小的数，从而抑制舍入误差的增长。\\
 	\indent\textbf{-} 只要矩阵是非奇异的，列主元法即可求出结果。\\
 	\indent\textbf{-} 这是目前求解小型稠密线性方程组最常用、最稳健的方法。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 程序运行截图}
 	
 	下图为程序在利用列主元素消元法求解线性方程组时的截图，详细代码见附录B。
@@ -1103,22 +1100,22 @@ sorting=none         % 按引用顺序排序
 		\centering % 整体居中
 		
 		% --- 第一行图片 ---
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/gsl (1).png}
 		\end{subfigure}
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/gsl (2).png}
 		\end{subfigure}
 		
 		
 		% --- 第二行图片 ---
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/gsl (3).png}
 		\end{subfigure}
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/gsl (4).png}
 		\end{subfigure}
@@ -1127,13 +1124,14 @@ sorting=none         % 按引用顺序排序
 		\label{fig:gsl}
 	\end{figure}
 	
+	\newpage
 	\subsubsection{高斯全主元素消元法}
 	
 	\noindent{\heiti 介绍}
 	
 	该方法总体思路与高斯消元法一致，只是在对每行处理的时候都会遍历未处理的整个矩阵元素并把找到的最大元素所在的位置通过行交换与列交换换到当前处理的对角元处，保证当前行对角元素全局最大。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 矩阵变换公式}
 	
 	\begin{equation}
@@ -1148,13 +1146,13 @@ sorting=none         % 按引用顺序排序
 		\right]
 	\end{equation}
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 收敛性}
 	
 	\textbf{-} 在所有高斯消元法的变种中，全主元法对舍入误差的控制效果最好。\\
 	\indent\textbf{-} 因为全主元素法需要多次寻找全局最大值，其搜索开销远大于列主元法。
 	
-	\vspace{1em}
+	\vspace{0.5em}
 	\noindent{\heiti 程序运行截图}
 	
 	下图为程序在利用全主元素消元法求解线性方程组时的截图，详细代码见附录B。
@@ -1163,22 +1161,22 @@ sorting=none         % 按引用顺序排序
 		\centering % 整体居中
 		
 		% --- 第一行图片 ---
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/gsq (1).png}
 		\end{subfigure}
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/gsq (2).png}
 		\end{subfigure}
 		
 		
 		% --- 第二行图片 ---
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/gsq (3).png}
 		\end{subfigure}
-		\begin{subfigure}[b]{0.45\textwidth}
+		\begin{subfigure}[b]{0.4\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{pic/gsq (4).png}
 		\end{subfigure}
@@ -1186,6 +1184,8 @@ sorting=none         % 按引用顺序排序
 		\caption{高斯全主元素消元法程序运行截图}
 		\label{fig:gsq}
 	\end{figure}
+	
+	\newpage
 	
 	\section{线性方程组的迭代解法}
 	
@@ -1357,11 +1357,7 @@ sorting=none         % 按引用顺序排序
 	\vspace{0.5em}
 	\noindent{\heiti 矩阵迭代公式}
 
-	\indent\indent\textbf{-} {\textbf{矩阵形式}}: 
-	\begin{equation}
-		\mathbf{x}^{(k+1)} = (\mathbf{D} + \omega \mathbf{L})^{-1} \left[ ((1-\omega)\mathbf{D} - \omega \mathbf{U})\mathbf{x}^{(k)} + \omega \mathbf{b} \right]
-	\end{equation}
-	\indent\indent\textbf{-} {\textbf{分量形式}}: 设 $\tilde{x}_i^{(k+1)}$ 为高斯-赛德尔法计算出的中间值，则
+	\indent\textbf{-} {\textbf{分量形式}}: 设 $\tilde{x}_i^{(k+1)}$ 为高斯-赛德尔法计算出的中间值，则
 	\begin{equation}
 		\begin{aligned}
 			\tilde{x}i^{(k+1)} &= \frac{1}{a{ii}} \left( b_i - \sum_{j < i} a_{ij}x_j^{(k+1)} - \sum_{j > i} a_{ij}x_j^{(k)} \right) \\
@@ -1376,6 +1372,7 @@ sorting=none         % 按引用顺序排序
 	\indent\indent\indent\textbf{-} 当 $0 < \omega < 1$ 时，称为 \textbf{低松弛法}。\\
 	\indent\indent\indent\textbf{-} 当 $\omega = 1$ 时，SOR方法为 \textbf{高斯-赛德尔法}。\\
 	\indent\indent\indent\textbf{-} 当 $1 < \omega < 2$ 时，称为 \textbf{超松弛法}，用于加速收敛。
+	
 	\vspace{0.5em}
 	\noindent{\heiti 程序运行截图}
 	
@@ -1415,106 +1412,173 @@ sorting=none         % 按引用顺序排序
 	
 	\subsection{总体设计}
 	
-	我的软件采用了模型-视图-控制器（MVC）的设计模式，下方为我的软件结构图，这种模式将主要的功能解耦，在日后较易进行进一步的扩展。
+	我的软件采用了模型-视图-控制器（MVC）的设计模式，下方为我的软件第一部分结构图，这种模式将主要的功能解耦，在日后较易进行进一步的扩展。
 	
-	\begin{figure}[h]
-		\centering 
-		\includegraphics[width=0.8\textwidth]{pic/1.png} 
-		\caption{软件的MVC架构图} % 图片的标题
-		\label{fig:mvc-diagram} % 为图片设置一个标签，用于在正文中引用
+	
+	\begin{figure}[h!] % [h!] 是图片位置选项，h 表示 here (此处)，! 表示强制执行
+		\centering % 将整个 figure 环境中的内容居中
+		
+		% --- 第一个子图 ---
+		\begin{subfigure}[b]{0.75\textwidth}
+			% [b] 表示子图的垂直对齐方式 (b=bottom, t=top, c=center)
+			% {0.48\textwidth} 定义了子图的宽度，这里是页面文本宽度的 48%
+			% 两个子图宽度之和应小于 1.0\textwidth
+			
+			\centering % 将子图内的图片居中
+			\includegraphics[width=\textwidth]{pic/mvc1.png} % 替换为你的图片文件名
+			% [width=\textwidth] 使图片宽度等于其所在的 subfigure 的宽度 (即 0.48\textwidth)
+			
+			\caption{非线性方程求根模块架构} % 子图的标题
+			\label{fig:sub1} % 用于在文本中引用此子图的标签
+		\end{subfigure}
+		\hfill % 这个命令会在两个子图之间创建一个弹性的水平空白，将它们推向两边
+		
+		% --- 第二个子图 ---
+		\begin{subfigure}[b]{0.75\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/mvc2.png} % 替换为你的图片文件名
+			\caption{线性方程组求解模块架构}
+			\label{fig:sub2}
+		\end{subfigure}
+		
+		\caption{软件核心模块的 MVC 架构图} % 整个图片组的总标题
+		\label{fig:main_label} % 用于在文本中引用整个图片组的标签
 	\end{figure}
 	
-	\subsubsection{模型}
-	模型层 (Model)存储了8种不同迭代策略，是运行的核心部分，主要包含下面内容：\\
-	\indent\textbf{·}\texttt{Equation} 类：负责解析用户输入的函数。\\
-	\indent\textbf{·}\texttt{IterativeMethod} 接口：定义了迭代方法的规范。\\
-	\indent\textbf{·}\texttt{MethodIterator} 类：采用迭代器模式，用于管理和执行分步迭代过程。\\
-	\indent\textbf{·}\texttt{IterationState} 记录：用于封装单次迭代计算后的状态信息。
+	\subsubsection{线性方程组求解模块}
 	
-	\subsubsection{视图}
-	视图 (View)主要负责向用户呈现内容，包含以下部分：\\
-	\indent\textbf{·}\textbf{控制面板}: 位于界面顶部，包含用于输入方程、选择迭代方法、设置初始值等控件。\\
-	\indent\textbf{·}\textbf{可视化面板}: 界面中心区域，由两个绘图控件组成。\\
-	\indent\textbf{·}\textbf{日志面板}: 位于界面右侧，实时显示每一次迭代的详细数值结果。
+	\indent\textbf{·} \textbf{模型}：\\
+	\indent\indent\textbf{-} \texttt{Direct\_impl} 包：封装了直接解法，如高斯消元法 、带主元选择的高斯消元法 、克劳特法。\\
+	\indent\indent\textbf{-} \texttt{Iterative\_impl} 包：封装了迭代解法，如雅可比法 、高斯-赛德尔法和松弛法。\\
+	\indent\indent\textbf{-} \texttt{LinearSystemSolver} 作为统一的策略接口，\texttt{DirectSolver} 和 \texttt{IterativeSolver} 是其子接口，分别定义了直接法和迭代法的行为。\\
+	\indent\indent\textbf{-} \texttt{MatrixState}, \texttt{VectorIterationState} 等类用于封装计算的中间状态和最终解。\\
 	
-	\subsubsection{控制器}
-	控制器 (Controller)连接视图和模型，是管理软件行为的角色。\\
-	\indent\textbf{·}\textbf{事件处理}: 监听视图层控件触发的事件。\\
-	\indent\textbf{·}\textbf{任务调度}: 调用模型层的对象执行核心计算任务。\\
-	\indent\textbf{·}\textbf{视图更新}:调用视图层的相应方法来更新界面显示。\\
-	通过这种方式，MVC架构确保了各部分的职责单一和明确，使得整个软件结构清晰，易于理解和维护。
+	\indent\textbf{·} \textbf{视图}：\\
+	\indent\indent\textbf{-} \texttt{MatrixView}：用于输入和显示系数矩阵 A 和向量 b。\\
+	\indent\indent\textbf{-} \texttt{ConvergencePlot}：用于可视化展示迭代法的收敛过程。\\
+	
+	\indent\textbf{·} \textbf{控制器}：\\
+	\indent\indent\textbf{-} \texttt{LinearSystemController}：响应用户的算法选择和“求解”命令，创建对应的求解器策略实例，执行求解过程，并从返回的状态对象中提取数据更新到 \texttt{MatrixView} 和 \texttt{ConvergencePlot} 中。
+	
+	\subsubsection{非线性方程求根模块}
+	
+	\indent\textbf{·} \textbf{模型}：\\
+	\indent\indent\textbf{-} \texttt{impl} 包：包含了所有非线性求根算法的策略实现，如牛顿法 、简化牛顿法 、各种割线法、简单迭代法和艾特肯加速法。\\
+	\indent\indent\textbf{-} \texttt{IterativeMethod} 是所有这些算法共同实现的策略接口。\\
+	\indent\indent\textbf{-} \texttt{MethodIterator} 是迭代器实现，它持有一个 \texttt{IterativeMethod} 策略实例，并管理 \texttt{IterationState}。\\
+	\indent\indent\textbf{-} \texttt{Equation} 类用于封装和解析用户输入的数学表达式。\\
+	
+	\indent\textbf{·} \textbf{视图}：\\
+	\indent\indent\textbf{-} \texttt{OneDimPlot} / \texttt{TwoDimPlot}：用于绘制函数图像，并动态地在图上标出每一次迭代的点位，使用户可以直观地看到逼近过程。\\
+	
+	\indent\textbf{·} \textbf{控制器}：\\
+	\indent\indent\textbf{-} \texttt{MainController}：根据用户选择的算法策略，创建 \texttt{MethodIterator}。通过控制 \texttt{Iterator} 的 \texttt{next()} 方法执行单步或连续迭代，每次迭代后从 \texttt{IterationState} 读取数据，并命令 \texttt{View} 刷新绘图。
 	
 	
 	
 	\subsection{核心功能实现}
 	
-	\subsubsection{函数字符串识别}
+	软件的核心计算功能主要围绕两大模块展开：非线性方程求根和线性方程组求解。两者都采用了\textbf{策略模式}来封装具体算法，但其内部的执行和控制流程根据问题的特性有所不同。
 	
-	为了让软件具备更好的灵活性，这里我使用了java的强大第三方库exp4j来解析用户以字符串形式输入的函数方程。它的具体功能被封装到 \texttt{Equation} 类中。这个类的核心工作流程如下：
-	
-	\begin{enumerate}
-		\item \textbf{表达式构建}: 当用户输入函数字符串时，程序会调用 exp4j 的 \texttt{ExpressionBuilder}将字符串解析成一个内部的 \texttt{Expression} 对象，并声明 \texttt{"x"} 为其唯一变量。
-		
-		\item \textbf{函数求值}: \texttt{Equation} 类对外提供 \texttt{getF()} 方法。当外部代码需要计算 \(f(x)\) 在某一点的值时，只需调用此函数。其内部会执行具体的计算将答案数值赋给变量 \texttt{"x"} 并返回计算结果。
-		
-		\item \textbf{自动数值微分}: 为了使用牛顿法等需要导数 \(f'(x)\) 的算法，这里软件在 \texttt{Equation} 类中实现了自动数值微分功能。在 \texttt{getDf()} 方法中，程序采用\textbf{中心差分法}来近似计算导数：
-		\[
-		f'(x) \approx \frac{f(x+h) - f(x-h)}{2h}
-		\]
-		其中 \(h\) 是一个极小的步长。
-	\end{enumerate}
-	
-	
-	\subsubsection{迭代功能实现}
-	
-	软件的迭代功能如总体设计中所述由策略加迭代器构成。接下来以牛顿法为例展示一下迭代的完整流程。
-	
-	该功能的实现分为两个层次：策略类 \texttt{NewtonMethod} 和其内部的迭代器类 \texttt{NewtonIterator}。
-	
-	\begin{enumerate}
-		\item \textbf{策略类 (\texttt{NewtonMethod})}:
-		该类是策略模式的具体实现，它实现了 \texttt{IterativeMethod} 接口，负责接收 \texttt{Equation} 对象和初始值 \texttt{x0}，然后创建并返回一个专门用于执行牛顿法迭代过程的 \texttt{NewtonIterator} 实例。
-		
-		\item \textbf{状态管理类 (\texttt{NewtonIterator})}:
-		这个类实现了 \texttt{MethodIterator} 接口，是执行迭代计算的核心。
+	\subsubsection{非线性方程求根实现}
+
+	\textbf{控制器驱动的迭代流程如下}：
 		\begin{itemize}
-			\item \textbf{状态封装}: 这个类纪录了迭代过程中所有详细的迭代信息。
-			\item \textbf{核心迭代逻辑 (\texttt{next()} 方法)}: 这是迭代器的核心。
-			\begin{enumerate}
-				\item 获取上一步函数值 \(f(x_k)\) 和导数值 \(f'(x_k)\)。
-				\item 应用牛顿法数学公式 \(x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}\) 计算出当前值 \texttt{x\_curr}同时进行健壮性检查。
-				\item 将本次迭代产生的所有信息（步数、当前值、函数值、误差等）封装到一个数据对象中。
-				\item 更新迭代器内部的状态将步数加一并将当前值滚动赋给上一步迭代值（\(x_prev\)。
-				\item 返回封装好的 \texttt{IterationState} 对象给控制器，以供其更新视图。
-			\end{enumerate}
-			\item \textbf{终止条件判断}:  (\texttt{hasNext()} 方法定义了迭代的终止条件，包括达到预设的最大迭代次数，或计算结果出现无效值等状况，以防止程序陷入无限循环。
+			\item \textbf{初始化}: 当用户点击“开始”时，控制器首先根据用户在下拉菜单中的选择，从 \texttt{IterativeMethod} 策略数组中获取对应的算法对象。随后，它调用该策略对象的 \texttt{createIterator()} 方法，传入 \texttt{Equation} 实例和初始值，从而创建一个与具体算法绑定的 \texttt{MethodIterator} 迭代器实例。这个过程完美体现了策略模式和工厂方法的思想。
+			
+			\item \textbf{单步执行}: 每次用户点击“下一步”时，控制器只需调用当前迭代器实例的 \texttt{next()} 方法。该方法会执行一次完整的迭代计算，并返回一个封装了所有中间数据的 \texttt{IterationState} 对象。
+			
+			\item \textbf{状态更新与可视化}: 控制器接收到 \texttt{IterationState} 对象后，将其存入历史记录列表，并调用 \texttt{View} 层的相应方法（如更新日志、重绘函数图像），从而在界面上实时反馈计算的进展。当迭代器的 \texttt{hasNext()} 方法返回 \texttt{false} 时，迭代过程终止。
 		\end{itemize}
+
+		
+	\subsubsection{线性方程组求解实现}
+		
+		该模块区分了\textbf{直接法}和\textbf{迭代法}两种求解思路。
+		
+		\begin{enumerate}
+			\item \textbf{双策略体系}:
+			控制器 (\texttt{LinearSystemController}) 内部维护了两个独立的策略：一个用于直接法 (\texttt{DirectSolver})，另一个用于迭代法 (\texttt{IterativeSolver})。控制器根据用户的选择来决定使用哪一套策略。
+			
+			\item \textbf{直接法}:
+			当用户选择一种直接法时，其实现流程如下：
+			\begin{itemize}
+				\item \textbf{预处理计算}: 控制器调用所选 \texttt{DirectSolver} 策略的 \texttt{solve()} 方法。该方法会\textbf{一次性地完成所有计算步骤}，然后返回一个 \texttt{DirectSolution} 对象。
+				\item \textbf{历史状态封装}: 这个 \texttt{DirectSolution} 对象内部不仅包含了最终解，还存储了一个包含所有中间步骤状态 (\texttt{MatrixState}) 的历史记录列表。
+				\item \textbf{可视化}: 用户的“下一步”操作，实际上是从这个预先计算好的历史记录列表中逐个取出 \texttt{MatrixState}，并交由 \texttt{MatrixView}进行渲染。
+			\end{itemize}
+			
+			\item \textbf{迭代法}:
+			当用户选择一种迭代法时，流程与非线性模块类似，流程如下：
+			\begin{itemize}
+				\item \textbf{创建迭代器}: 控制器调用所选 \texttt{IterativeSolver} 策略的 \texttt{createIterator()} 方法来获取一个迭代器。特别地，对于SOR方法，控制器会额外读取用户输入的 $\omega$ 值并传入。
+				\item \textbf{实时单步计算}: 用户的“下一步”操作会调用迭代器的 \texttt{next()} 方法，\textbf{实时执行一次迭代计算}，并返回一个包含当前步结果 (\texttt{VectorIterationState}) 的状态对象。
+				\item \textbf{可视化}: 控制器将新的状态对象传递给 \texttt{ConvergencePlot}，后者会在收敛图中\textbf{增量地添加}一个新的数据点，实时描绘解的收敛轨迹。
+			\end{itemize}
+		\end{enumerate}
+
+	
+	\subsubsection{函数字符串识别与函数求值}
+	
+	相关的代码我附在附录D处，下面介绍我所用到的算法与逻辑。
+	
+	\begin{enumerate}
+	
+	\item \textbf{词法分析} 
+	
+		这里我们在所有的运算符、括号和逗号前后添加空格，然后基于空格进行分割，得到初步的符号流，例如 \texttt{[ "-", "x", "*", "sin", "(", "pi", "*", ")" ]}。
+	
+	\item \textbf{调度场算法}
+	这里我们利用调度长算法将中缀表达式的符号流转换为后缀表达式，即\textbf{逆波兰表达式 (RPN)}。\\
+	我们严格遵守调度场算法的相关要求，设置辅助栈来协助转换字符串，高优先级先压栈，低优先级则出栈加入输出队列（实际情况更加复杂，此处我自己实现了普通的调度场算法，更多的细致内容如特殊函数、左右结合的处理由AI辅助完成）。
+	
+	
+	我们
+	
+	\item \textbf{求值}
+	这里我们使用一个栈来进行函数求值。首先我们遍历 RPN 列表：遇到数字、常数或变量值，则压入栈中；遇到运算符或函数，则从栈中弹出所需数量的操作数，进行计算，并将结果压回栈中。遍历结束后，栈中唯一剩下的元素即为表达式的最终计算结果。
 	\end{enumerate}
 	
-	通过这种方式，算法的定义与算法的单次执行过程被分离开来，使得主控制器的逻辑保持简洁，只需与标准接口交互即可驱动所有不同类型的迭代方法。
-	
-	
+	\newpage
 	\subsection{软件界面介绍}
 	
-	下图展示了软件的用户界面。可以看到整个界面分为三部分：上侧为用户输入区，在这里用户输入自己想求解的方程、选择想使用的迭代方法，并重置或单步运行迭代；左下方为可视化区域，在这里用户可以看到二维平面和一维数轴上迭代点的变化；右下侧为迭代日志，在这里用户可以看到每一次迭代的详细信息。
+	下图展示了软件中方程迭代法子功能的用户界面。可以看到整个界面分为三部分：上侧为用户输入区，在这里用户输入自己想求解的方程、选择想使用的迭代方法，并重置或单步运行迭代；左下方为可视化区域，在这里用户可以看到二维平面和一维数轴上迭代点的变化；右下侧为迭代日志，在这里用户可以看到每一次迭代的详细信息。
 	
-	\begin{figure}[h]
+	\begin{figure}[h!]
 		\centering 
-		\includegraphics[width=0.6\textwidth]{pic/2.png} 
-		\caption{软件用户界面} % 图片的标题
-		\label{fig:2} % 为图片设置一个标签，用于在正文中引用
+		\includegraphics[width=0.6\textwidth]{pic/jm (1).png} 
+		\caption{方程的迭代法用户界面} % 图片的标题
+	\end{figure}
+	
+	下图展示了线性方程组直接法软件的用户界面。可以看到这个页面被分成了上中下三个部分，上部为矩阵输入处，用于用户输入要进行求解的增广矩阵；中间部分为程序求解过程的可视化处，在这里用户可以看到矩阵是如何一步步变化为最终答案的；最下侧展现了每一次迭代过程的详细操作和记录。
+	
+	\begin{figure}[h!]
+		\centering 
+		\includegraphics[width=0.6\textwidth]{pic/jm (3).png} 
+		\caption{线性方程组直接法软件用户界面} % 图片的标题
 	\end{figure}
 	
 	\newpage
+	
+	下图展示了线性方程组迭代法软件的用户界面。同样的这个图被分为了三个部分，在上侧依旧是矩阵输入处用于输入要求解的矩阵；中间展示每一次迭代产生的向量与答案向量之间范数的大小用于衡量误差大小；最下侧记录迭代过程中的相关数据。
+	
+	\begin{figure}[h!]
+		\centering 
+		\includegraphics[width=0.6\textwidth]{pic/jm (2).png} 
+		\caption{线性方程组迭代法软件用户界面} % 图片的标题
+	\end{figure}
+	
+	\newpage
+	
 	\section{总结}
 	
 	\subsection{工作总结}
 	
-	总的来说本报告较为详细的分析了不同迭代算法各自的数学原理和收敛性分析，就其本质来看，所有相关迭代方法均是由最初的普通迭代法改造而来，其本质无外乎修改映射方式使映射的收缩效果更好来加快收敛速度。
+	总的来说本报告较为详细的分析与展示了不同算法各自的数学原理和收敛性分析。就迭代法本质来看，所有相关迭代方法均是由最初的普通迭代法改造而来（无论是方程还是方程组），其本质无外乎修改映射方式使映射的收缩效果更好来加快收敛速度。
 	
-	此外，本报告还提供了一款基于java开发的可视化软件，并以此来详细的展示多种迭代方法在二维坐标系和一维数轴上的表现。本软件采用了MVC布局，便于日后的拓展任务。
+	此外，本报告还提供了一款基于java开发的可视化软件，并以此来详细的展示多种方法不同的运行模式。本软件采用了MVC布局，便于日后的拓展任务。
 	
-	通过将抽象的公式转化为直观的动画和图，本报告连接了编程实践和理论学习，一定程度上减轻了第二章的学习任务，达到了预期的目标。
+	通过将抽象的公式转化为直观的动画和图，本报告连接了编程实践和理论学习，一定程度上减轻了数值分析的学习任务，达到了预期的目标。
 	
 	最后，本人建议您可以从GitHub（\url{https://github.com/twx145/Numerical-Analysis/releases/tag/v2.5.0}）上下载最新软件。
 	
@@ -1524,10 +1588,7 @@ sorting=none         % 按引用顺序排序
 	
 	\begin{itemize}
 		\item \textbf{扩充算法库}:
-		集成更多高级算法，如处理多项式根的拉盖尔法，并针对重根问题提供优化解法。
-		
-		\item \textbf{拓展至高维问题}:
-		将软件功能从求解单一方程升级至求解非线性方程组。
+		集成更多高级算法，如处理多项式根的拉盖尔法。
 		
 		\item \textbf{增强交互与智能}:
 		开发如拖拽初始点、用户缩放图像等功能，使探索分析过程更加便捷、智能。
@@ -2026,46 +2087,153 @@ sorting=none         % 按引用顺序排序
 	\end{lstlisting}
 	
 	\newpage
-	\section{函数识别部分完整代码}
+	\section{函数识别与求值部分完整代码}
 	\markboth{附录}{}
 	
 	\begin{lstlisting}[language=Java, caption={函数识别核心逻辑}, label={lst:dampedNewton-java}]
 		public class Equation {
 			
-			private final Expression f, g;
-			private static final double H = 1e-7; // 微分小步长
+			private final ManualExpression f, g;
+			private static final double H = 1e-7; 
 			
-			// 构造函数
 			public Equation(String fStr, String gStr) {
-				this.f = new ExpressionBuilder(fStr).variable("x").build();
+				this.f = new ManualExpression(fStr);
 				if (gStr != null && !gStr.isBlank()) {
-					this.g = new ExpressionBuilder(gStr).variable("x").build();
+					this.g = new ManualExpression(gStr);
 				} else {
-					this.g = new ExpressionBuilder("0/0").variable("x").build(); 
+					this.g = new ManualExpression(null); 
 				}
 			}
 			
 			public Function<Double, Double> getF() {
-				return (x) -> f.setVariable("x", x).evaluate();
+				return f::evaluate;
 			}
 			
 			public Function<Double, Double> getG() {
-				return (x) -> g.setVariable("x", x).evaluate();
+				return g::evaluate;
 			}
-			
-			// 计算导数
 			public Function<Double, Double> getDf() {
-				// 使用中心差分公式: (f(x+h) - f(x-h)) / (2h)
+				
 				return (x) -> {
 					try {
-						double f_x_plus_h = f.setVariable("x", x + H).evaluate();
-						double f_x_minus_h = f.setVariable("x", x - H).evaluate();
+						double f_x_plus_h = f.evaluate(x + H);
+						double f_x_minus_h = f.evaluate(x - H);
 						return (f_x_plus_h - f_x_minus_h) / (2 * H);
 					} catch (Exception e) {
 						return Double.NaN;
 					}
 				};
 			}
+		}
+	\end{lstlisting}
+	
+	\newpage
+	
+	\begin{lstlisting}[language=Java, caption={词法分析}, label={lst:dampedNewton-java}]
+		private List<String> tokenize(String expression) {
+			List<String> tokens = new ArrayList<>();
+			
+			expression = expression.replace("(", " ( ");
+			expression = expression.replace(")", " ) ");
+			expression = expression.replace(",", " , ");
+			for (String op : PRECEDENCE.keySet()) {
+				if (!op.equals(UNARY_MINUS)) { 
+					expression = expression.replace(op, " " + op + " ");
+				}
+			}
+			
+			String[] rawTokens = expression.trim().split("\\s+");
+			Collections.addAll(tokens, rawTokens);
+			
+			return tokens;
+		}
+	\end{lstlisting}
+	
+	\begin{lstlisting}[language=Java, caption={调度场算法}, label={lst:dampedNewton-java}]
+		private List<String> shuntingYard(List<String> tokens) {
+			List<String> outputQueue = new ArrayList<>();
+			Stack<String> operatorStack = new Stack<>();
+			String lastToken = null;
+			for (String token : tokens) {
+				if (isNumber(token) || CONSTANTS.containsKey(token.toLowerCase())) {
+					outputQueue.add(token);
+				} else if (isVariable(token)) {
+					outputQueue.add(token);
+				} else if (FUNCTIONS.containsKey(token.toLowerCase())) {
+					operatorStack.push(token);
+				} else if (token.equals(",")) {
+					while (!operatorStack.isEmpty() && !operatorStack.peek().equals("(")) {
+						outputQueue.add(operatorStack.pop());}
+					if (operatorStack.isEmpty()) {
+						throw new IllegalArgumentException("非法输入: 逗号位置不当或括号不匹配。");}
+				} else if (token.equals("-") && (lastToken == null || PRECEDENCE.containsKey(lastToken) || lastToken.equals("("))) {
+					operatorStack.push(UNARY_MINUS);
+				} else if (PRECEDENCE.containsKey(token)) { 
+					while (!operatorStack.isEmpty() && PRECEDENCE.containsKey(operatorStack.peek())) {
+						String op2 = operatorStack.peek();
+						if ((ASSOCIATIVITY.get(token) && PRECEDENCE.get(token) <= PRECEDENCE.get(op2)) ||
+						(!ASSOCIATIVITY.get(token) && PRECEDENCE.get(token) < PRECEDENCE.get(op2))) {
+							outputQueue.add(operatorStack.pop());
+						} else {
+							break;}}
+					operatorStack.push(token);
+				} else if (token.equals("(")) {
+					operatorStack.push(token);
+				} else if (token.equals(")")) {
+					while (!operatorStack.isEmpty() && !operatorStack.peek().equals("(")) {
+						outputQueue.add(operatorStack.pop());}
+					if (operatorStack.isEmpty()) {
+						throw new IllegalArgumentException("非法输入: 括号不匹配。");}
+					operatorStack.pop(); 
+					if (!operatorStack.isEmpty() && FUNCTIONS.containsKey(operatorStack.peek().toLowerCase())) {
+						outputQueue.add(operatorStack.pop());}
+				} else {
+					throw new IllegalArgumentException("非法输入: 包含无法识别的符号 '" + token + "'");}
+				lastToken = token;}
+			while (!operatorStack.isEmpty()) {
+				String op = operatorStack.pop();
+				if (op.equals("(")) {
+					throw new IllegalArgumentException("非法输入: 括号不匹配。");}
+				outputQueue.add(op);}
+			return outputQueue;
+		}
+	\end{lstlisting}
+	
+	\newpage
+	\begin{lstlisting}[language=Java, caption={函数求值}, label={lst:dampedNewton-java}]
+		public double evaluate(double xValue) {
+			if (variables.size() > 1 || (variables.size() == 1 && !variables.contains("x"))) {
+				throw new IllegalArgumentException("该表达式需要 'x' 之外的变量，无法仅用 xValue 求值。");}
+			Stack<Double> valueStack = new Stack<>();
+			for (String token : rpnExpression) {
+				if (isNumber(token)) {
+					valueStack.push(Double.parseDouble(token));
+				} else if (CONSTANTS.containsKey(token.toLowerCase())) {
+					valueStack.push(CONSTANTS.get(token.toLowerCase()));
+				} else if (token.equalsIgnoreCase("x")) {
+					valueStack.push(xValue);
+				} else if (PRECEDENCE.containsKey(token)) {
+					if (token.equals(UNARY_MINUS)) {
+						if (valueStack.isEmpty()) throw new IllegalArgumentException("非法输入: 运算符缺少操作数。");
+						valueStack.push(-valueStack.pop());
+					} else {
+						if (valueStack.size() < 2) throw new IllegalArgumentException("非法输入: 运算符缺少操作数。");
+						double b = valueStack.pop();
+						double a = valueStack.pop();
+						valueStack.push(applyOperator(token, a, b));}
+				} else if (FUNCTIONS.containsKey(token.toLowerCase())) {
+					String func = token.toLowerCase();
+					int numArgs = FUNCTIONS.get(func);
+					if (valueStack.size() < numArgs) {
+						throw new IllegalArgumentException("非法输入: 函数 '" + func + "' 的参数数量不足。");}
+					List<Double> args = new ArrayList<>();
+					for (int i = 0; i < numArgs; i++) {
+						args.add(valueStack.pop());}
+					Collections.reverse(args); 
+					valueStack.push(applyFunction(func, args));}}
+			if (valueStack.size() != 1) {
+				throw new IllegalArgumentException("非法输入: 表达式格式错误，导致最终栈中元素不唯一。");}
+			return valueStack.pop();
 		}
 	\end{lstlisting}
 	
