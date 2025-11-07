@@ -2,8 +2,11 @@
 package com.twx.linear_systems.controller;
 
 import com.twx.linear_systems.model.*;
-import com.twx.linear_systems.model.Direct_impl.GaussianEliminationSolver;
+import com.twx.linear_systems.model.Direct_impl.*;
+
+import com.twx.linear_systems.model.Iterative_impl.GaussSeidelSolver;
 import com.twx.linear_systems.model.Iterative_impl.JacobiSolver;
+import com.twx.linear_systems.model.Iterative_impl.SuccessiveOverRelaxationSolver;
 import com.twx.linear_systems.view.ConvergencePlot;
 import com.twx.linear_systems.view.MatrixView;
 import javafx.collections.FXCollections;
@@ -12,6 +15,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import org.apache.commons.math3.linear.Array2DRowRealMatrix;
 import org.apache.commons.math3.linear.ArrayRealVector;
@@ -34,13 +38,22 @@ public class LinearSystemController {
     @FXML private StackPane visualisationPane;
     @FXML private TextArea logArea;
 
-    // --- Solver Management (Decoupled Strategy) ---
+    // 新增: 为SOR的omega参数添加UI容器
+    @FXML private HBox sorControlsContainer;
+    private TextField omegaField;
+
+
+    // --- Solver Management ---
     private final List<DirectSolver> directSolvers = List.of(
-            // 未来可在这里添加 new LUSolver(), new CholeskySolver() 等
+            new CroutSolver(),
+            new CompletePivotingGaussianSolver(),
+            new SimpleGaussianEliminationSolver(),
             new GaussianEliminationSolver()
     );
+    private final SuccessiveOverRelaxationSolver sorSolver = new SuccessiveOverRelaxationSolver(); // 单独实例化以便引用
     private final List<IterativeSolver> iterativeSolvers = List.of(
-            // 未来可在这里添加 new GaussSeidelSolver(), new SORSolver() 等
+            sorSolver, // 将实例放入列表
+            new GaussSeidelSolver(),
             new JacobiSolver()
     );
 
@@ -60,9 +73,12 @@ public class LinearSystemController {
     public void initialize() {
         // --- Spinner Setup ---
         SpinnerValueFactory.IntegerSpinnerValueFactory valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 6, 3);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 9, 3);
         sizeSpinner.setValueFactory(valueFactory);
         sizeSpinner.valueProperty().addListener((obs, oldVal, newVal) -> createMatrixInputGrid(newVal));
+
+        // --- Omega (SOR) Controls Setup ---
+        setupSorControls();
 
         // --- ComboBox Setup ---
         methodTypeComboBox.setItems(FXCollections.observableArrayList("直接法", "迭代法"));
@@ -78,14 +94,28 @@ public class LinearSystemController {
 
         // --- Initial UI State ---
         createMatrixInputGrid(sizeSpinner.getValue());
-        methodTypeComboBox.getSelectionModel().selectFirst();
+        methodTypeComboBox.getSelectionModel().select(1);
     }
 
     /**
-     * 当解法类型改变时，更新具体方法的下拉框内容，并切换可视化面板.
-     * @param methodType "直接法" 或 "迭代法"
+     * 创建并配置SOR方法的omega输入控件.
      */
+    private void setupSorControls() {
+        Label omegaLabel = new Label("Omega (ω):");
+        omegaField = new TextField("1.2"); // 设置一个常用的默认值
+        omegaField.setPromptText("0 < ω < 2");
+        omegaField.setPrefWidth(80);
+        sorControlsContainer.getChildren().addAll(omegaLabel, omegaField);
+    }
+
     private void updateSpecificMethodComboBox(String methodType) {
+        // 监听具体方法选择的改变，以控制omega输入框的可见性
+        specificMethodComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            boolean isSor = newVal != null && newVal.equals(sorSolver.getName());
+            sorControlsContainer.setVisible(isSor);
+            sorControlsContainer.setManaged(isSor); // managed为false时，控件不参与布局
+        });
+
         if ("直接法".equals(methodType)) {
             specificMethodComboBox.setItems(FXCollections.observableArrayList(
                     directSolvers.stream().map(LinearSystemSolver::getName).collect(Collectors.toList())
@@ -102,13 +132,11 @@ public class LinearSystemController {
         specificMethodComboBox.getSelectionModel().selectFirst();
     }
 
-    /**
-     * "开始/重置" 按钮的事件处理器. 读取输入，选择合适的求解器，并初始化求解过程.
-     */
     private void initializeSolver() {
         try {
-            // --- 1. 从UI读取矩阵和向量数据 ---
+            // --- 1. 读取UI数据 ---
             int size = sizeSpinner.getValue();
+            // ... (读取矩阵和向量的代码保持不变) ...
             double[][] aData = new double[size][size];
             double[] bData = new double[size];
             for (Node node : matrixInputGrid.getChildren()) {
@@ -124,10 +152,11 @@ public class LinearSystemController {
             RealMatrix a = new Array2DRowRealMatrix(aData);
             RealVector b = new ArrayRealVector(bData);
 
+
             clearAll();
             log("初始化求解器...");
 
-            // --- 2. 根据选择，解耦地调用求解器 ---
+            // --- 2. 根据选择调用求解器 ---
             String selectedMethodName = specificMethodComboBox.getSelectionModel().getSelectedItem();
 
             if (currentSolverType == SolverType.DIRECT) {
@@ -144,18 +173,36 @@ public class LinearSystemController {
                         .findFirst()
                         .orElseThrow(() -> new IllegalStateException("未找到指定的迭代法求解器: " + selectedMethodName));
                 RealVector x0 = new ArrayRealVector(size, 0.0);
-                iterativeIterator = solver.createIterator(a, b, x0, 1e-6, 100);
+
+                // --- 核心改动: 检查是否为SOR方法并处理omega ---
+                if (solver instanceof SuccessiveOverRelaxationSolver sor) {
+                    double omega = Double.parseDouble(omegaField.getText());
+                    if (omega <= 0 || omega >= 2) {
+                        throw new IllegalArgumentException("Omega (ω) 值必须在 (0, 2) 范围内。");
+                    }
+                    log("使用 SOR 方法, ω = " + omega);
+                    iterativeIterator = sor.createIterator(a, b, x0, omega, 1e-6, 100);
+                } else {
+                    // 对于其他迭代法，调用标准接口
+                    iterativeIterator = solver.createIterator(a, b, x0, 1e-6, 100);
+                }
             }
 
-            performNextStep(); // 显示初始状态
+            performNextStep();
             nextStepButton.setDisable(false);
 
+        } catch (NumberFormatException e) {
+            log("错误: 输入无效，请确保所有输入均为数字。");
+            nextStepButton.setDisable(true);
         } catch (Exception e) {
-            log("错误: 请检查输入数据或算法选择。\n" + e.getMessage());
-            e.printStackTrace(); // 方便调试
+            log("错误: " + e.getMessage());
+            e.printStackTrace();
             nextStepButton.setDisable(true);
         }
     }
+
+    // --- performNextStep, displayFinalSolution, clearAll, 等其他方法保持不变 ---
+    // ... (此处省略您原有的其他方法，无需改动)
 
     /**
      * "下一步" 按钮的事件处理器. 统一处理两种类型的求解过程.
@@ -208,17 +255,11 @@ public class LinearSystemController {
         convergencePlot.clear();
         nextStepButton.setDisable(true);
     }
-
-    /**
-     * 在UI上创建用于输入矩阵和向量的网格.
-     * @param size 矩阵的大小 (n x n)
-     */
     private void createMatrixInputGrid(int size) {
         matrixInputGrid.getChildren().clear();
         matrixInputGrid.setAlignment(Pos.CENTER);
-        // 提供一组默认的示例数据，方便测试
         double[][] sampleA = {{4, 1, -1, 1}, {1, 4, 1, -1}, {-1, 1, 5, 1}, {1, -1, 1, 3}};
-        double[] sampleB = {6, 5, 1, 1}; // 解为 [1, 1, 0, 0] (近似)
+        double[] sampleB = {6, 5, 1, 1};
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -241,20 +282,9 @@ public class LinearSystemController {
             matrixInputGrid.add(tf, size + 1, i);
         }
     }
-
-    /**
-     * 在日志区域追加一条消息.
-     * @param message 要显示的消息
-     */
     private void log(String message) {
         logArea.appendText(message + "\n");
     }
-
-    /**
-     * 将一个 RealVector 格式化为易于阅读的字符串.
-     * @param vector 要格式化的向量
-     * @return 格式化后的字符串, 如 "[1.0000, 2.5000]"
-     */
     private String formatVector(RealVector vector) {
         return IntStream.range(0, vector.getDimension())
                 .mapToDouble(vector::getEntry)

@@ -11,8 +11,8 @@ public class ConvergencePlot extends LineChart<Number, Number> {
 
     public ConvergencePlot() {
         super(new NumberAxis(), new NumberAxis());
-        ((NumberAxis) getXAxis()).setLabel("迭代次数 (k)");
-        ((NumberAxis) getYAxis()).setLabel("残差范数 ||Ax-b||");
+        getXAxis().setLabel("迭代次数 (k)");
+        getYAxis().setLabel("残差范数 ||Ax-b||");
         this.setTitle("迭代收敛过程");
         this.setAnimated(true);
 

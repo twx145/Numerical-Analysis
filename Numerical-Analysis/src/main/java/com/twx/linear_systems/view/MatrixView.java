@@ -3,6 +3,7 @@ package com.twx.linear_systems.view;
 
 import com.twx.linear_systems.model.MatrixState;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -17,6 +18,7 @@ public class MatrixView extends GridPane {
         this.setPadding(new Insets(10));
         this.setHgap(10);
         this.setVgap(10);
+        this.setAlignment(Pos.CENTER);
     }
 
     public void updateMatrix(MatrixState state) {

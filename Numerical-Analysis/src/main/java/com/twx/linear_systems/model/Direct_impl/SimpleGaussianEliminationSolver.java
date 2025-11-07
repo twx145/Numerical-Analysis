@@ -1,4 +1,4 @@
-// 文件路径: src/main/java/com/twx/linear_systems/model/Direct_impl/GaussianEliminationSolver.java
+// 文件路径: src/main/java/com/twx/linear_systems/model/Direct_impl/SimpleGaussianEliminationSolver.java
 package com.twx.linear_systems.model.Direct_impl;
 
 import com.twx.linear_systems.model.DirectSolution;
@@ -7,16 +7,14 @@ import com.twx.linear_systems.model.MatrixState;
 import org.apache.commons.math3.linear.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-public class GaussianEliminationSolver implements DirectSolver {
+public class SimpleGaussianEliminationSolver implements DirectSolver {
 
     private static final double EPSILON = 1e-10;
 
     @Override
     public String getName() {
-        return "高斯列主元消元法";
+        return "高斯消元法";
     }
 
     @Override
@@ -29,84 +27,52 @@ public class GaussianEliminationSolver implements DirectSolver {
 
         history.add(new MatrixState("初始增广矩阵", aug.copy(), null));
 
-        // 1. 前向消元 (这部分代码保持不变)
+        // 1. 前向消元 (无主元选择)
         for (int i = 0; i < n; i++) {
-            int max = i;
-            for (int j = i + 1; j < n; j++) {
-                if (Math.abs(aug.getEntry(j, i)) > Math.abs(aug.getEntry(max, i))) {
-                    max = j;
-                }
-            }
-            if (i != max) {
-                double[] temp = aug.getRow(i);
-                aug.setRow(i, aug.getRow(max));
-                aug.setRow(max, temp);
-                history.add(new MatrixState("行交换: R" + (i + 1) + " <-> R" + (max + 1), aug.copy(), new int[]{i, max}));
-            }
             if (Math.abs(aug.getEntry(i, i)) < EPSILON) {
-                history.add(new MatrixState("错误: 主元过小, 矩阵奇异或接近奇异", aug.copy(), new int[]{i}));
+                history.add(new MatrixState("错误: 主元 A(" + (i + 1) + "," + (i + 1) + ") 为零或过小，无法继续", aug.copy(), new int[]{i}));
                 return new DirectSolution(history, null);
             }
             for (int j = i + 1; j < n; j++) {
                 double factor = aug.getEntry(j, i) / aug.getEntry(i, i);
                 if (Math.abs(factor) < EPSILON) continue;
+
                 RealVector rowI = aug.getRowVector(i).mapMultiply(factor);
                 RealVector rowJ = aug.getRowVector(j).subtract(rowI);
                 aug.setRowVector(j, rowJ);
+
                 String desc = String.format("行变换: R%d = R%d - (%.3f) * R%d", j + 1, j + 1, factor, i + 1);
                 history.add(new MatrixState(desc, aug.copy(), new int[]{i, j}));
             }
         }
         history.add(new MatrixState("前向消元完成，形成上三角矩阵", aug.copy(), null));
 
+        // 2. 回代求解 (与之前版本完全相同)
         double[] x = new double[n];
-        // 创建一个用于可视化的矩阵副本，这样我们的修改就不会影响计算逻辑
         RealMatrix displayMatrix = aug.copy();
-
         for (int i = n - 1; i >= 0; i--) {
             double sum = 0.0;
-            // 用于生成描述字符串的辅助对象
             StringBuilder sumDesc = new StringBuilder();
-
-            // --- 步骤 2.1: 计算右侧已知项的和 ---
             for (int j = i + 1; j < n; j++) {
                 double term = aug.getEntry(i, j) * x[j];
                 sum += term;
-                if (sumDesc.length() > 0) {
-                    sumDesc.append(" + ");
-                }
+                if (!sumDesc.isEmpty()) sumDesc.append(" + ");
                 sumDesc.append(String.format("%.2f*x%d(%.2f)", aug.getEntry(i, j), j + 1, x[j]));
             }
 
             double originalB = aug.getEntry(i, n);
             double newB = originalB - sum;
             double divisor = aug.getEntry(i, i);
+            String substitutionDesc = (!sumDesc.isEmpty())
+                    ? String.format("回代 R%d: b' = %.2f - (%s) = %.2f", i + 1, originalB, sumDesc, newB)
+                    : String.format("回代 R%d: 方程已简化", i + 1);
 
-            // --- 步骤 2.2: 生成并添加“代入”这一步的 MatrixState ---
-            String substitutionDesc;
-            if (sumDesc.length() > 0) {
-                substitutionDesc = String.format("回代 R%d: 将已知解代入, b' = %.2f - (%s) = %.2f",
-                        i + 1, originalB, sumDesc, newB);
-            } else {
-                // 对于最后一行，没有需要代入的项
-                substitutionDesc = String.format("回代 R%d: 方程已简化", i + 1);
-            }
-
-            // 为了可视化，我们将已代入的项的系数置为0，并更新b的值
-            for (int j = i + 1; j < n; j++) {
-                displayMatrix.setEntry(i, j, 0.0);
-            }
+            for (int j = i + 1; j < n; j++) displayMatrix.setEntry(i, j, 0.0);
             displayMatrix.setEntry(i, n, newB);
             history.add(new MatrixState(substitutionDesc, displayMatrix.copy(), new int[]{i}));
 
-            // --- 步骤 2.3: 计算 x[i] ---
             x[i] = newB / divisor;
-
-            // --- 步骤 2.4: 生成并添加“求解”这一步的 MatrixState ---
-            String solveDesc = String.format("计算 x%d = b' / A%d,%d = %.3f / %.3f = %.4f",
-                    i + 1, i + 1, i + 1, newB, divisor, x[i]);
-
-            // 为了可视化，我们将主元变为1，b值更新为最终解
+            String solveDesc = String.format("计算 x%d = b' / A%d,%d = %.3f / %.3f = %.4f", i + 1, i + 1, i + 1, newB, divisor, x[i]);
             displayMatrix.setEntry(i, i, 1.0);
             displayMatrix.setEntry(i, n, x[i]);
             history.add(new MatrixState(solveDesc, displayMatrix.copy(), new int[]{i}));
@@ -114,7 +80,6 @@ public class GaussianEliminationSolver implements DirectSolver {
 
         RealVector solutionVector = new ArrayRealVector(x);
         history.add(new MatrixState("回代完成，得到最终解", displayMatrix, null));
-
         return new DirectSolution(history, solutionVector);
     }
 }

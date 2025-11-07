@@ -139,7 +139,8 @@ sorting=none         % 按引用顺序排序
 
 % ======================================================================
 % 3. 文档正文开始
-% ======================================================================
+% ========================================================
+
 
 \begin{document}
 	
@@ -157,7 +158,7 @@ sorting=none         % 按引用顺序排序
 			\vspace*{3.5cm}
 			
 			% --- 论文题目 ---
-			{\Huge \bfseries 数值分析方程的迭代解法研究报告\par}
+			{\Huge \bfseries 数值分析上机研究报告\par}
 			
 			\vspace{8cm}
 			
@@ -188,16 +189,18 @@ sorting=none         % 按引用顺序排序
 	% --- 摘要与关键词 ---
 	\begin{abstract}
 		
-		在数值分析的第二章课程中我们学习了非线性方程的迭代解法，这一类方法是为计算机量身定制的，不同于以往我们在学习中接触到的解析式解法，因此，本报告的目的是在计算机中实际应用上述迭代方法，以加深自己对迭代解法的理解。
+		在数值分析的第二章课程中我们学习了非线性方程的迭代解法；在第三章与第四章中我们学习了线性方程组的直接解法和迭代解法，这一类方法利用了计算机高效的计算能力，是为计算机量身定制的，不同于以往我们在学习中接触到的解析式解法和克莱姆法则。因此，本报告的目的是在计算机中实际应用上述迭代方法，以加深自己对相关知识的理解。
 		
-		本报告选择使用JAVA语言来进行上机实现，原因有三：其一为本学期新增JAVA选修课可以借此机会增加对JAVA语言的熟练度；其二JAVA还提供较为方便的javafx方便将我的程序更好的可视化；其三JAVA可以将我的程序方便的转化为软件，方便他人一键安装使用。
+		本报告选择使用JAVA语言来进行上机实现，原因有三：其一为JAVA还提供较为方便的javafx方便将我的程序更好的可视化；其二JAVA可以将我的程序方便的转化为软件，方便他人一键安装使用；其三本学期新增JAVA选修课可以借此机会增加对JAVA语言的熟练度。
 		
-		在上机期间我手动编写了有关迭代方法——牛顿法、艾特肯迭代法、单点弦截法等8种方法，其余部分借助AI完成相关内容的编写。该软件展现了方程迭代在二维坐标系和一维坐标轴上的变化，方便我们从不同的角度去观察映射对迭代行为的影响。此外，本程序记录每次迭代产生的相关数据，包括x轴坐标值、f(x)值、相邻两次迭代x轴坐标差值等内容。
+		在软件的子功能方程的迭代解法中，我手动编写了有关方法——牛顿法、艾特肯迭代法、单点弦截法等8种方法，其余部分借助AI完成相关内容的编写。该软件展现了方程迭代在二维坐标系和一维坐标轴上的变化，方便我们从不同的角度去观察映射对迭代行为的影响。此外，本程序记录每次迭代产生的相关数据，包括x轴坐标值、f(x)值、相邻两次迭代x轴坐标差值等内容。
 		
-		本报告展示了不同迭代方法的代码实现、对比了不同方法之间的差异，最后提供了一个安装程序，以便他人可以方便的使用迭代方法的演示功能。以下为我的GitHub仓库：\url{https://github.com/twx145/Numerical-Analysis}，其中记录了所有相关代码和latex\cite{knuth1984}文案。
+		在软件的另一个子功能线性方程组的解法中，我编写了直接法——高斯消元法、克劳特消元法、列主元素法和全主元素法，这部分内容通过矩阵的实时变换来进行可视化；同时我编写了迭代法——雅可比迭代法、高斯赛德尔迭代法、松弛迭代法，这部分内容通过残差变化曲线图来进行迭代效率的可视化。
+		
+		本报告展示了不同方法的代码实现、对比了不同方法之间的差异，最后提供了一个安装程序，以便他人可以方便的使用迭代方法的演示功能。以下为我的GitHub仓库：\url{https://github.com/twx145/Numerical-Analysis}，其中记录了所有相关代码和latex\cite{knuth1984}文案。
 		
 		\vspace{1em} % 增加一点垂直间距
-		\noindent {\heiti 关键词：} 方程迭代解法；牛顿迭代法；可视化软件
+		\noindent {\heiti 关键词：} 方程迭代解法；线性方程组的数值解法；JAVA方程（组）求解软件
 	\end{abstract}
 	
 	\newpage
@@ -222,11 +225,13 @@ sorting=none         % 按引用顺序排序
 	
 	非线性方程因其通常能比线性方程更好的描述事物的规律而在学习生活中很常见，但是却鲜有非线性方程可以求得解析解，因此，为计算机计算方程解而量身打造的迭代法变得很重要，迭代法通过一系列逐步逼近可以得到预期精度的解，具有高效精准的特点。
 	
-	本报告的核心任务包含以下三点：一是研究课内外常见的8种迭代解法\cite{SSBDA84C6D76690EA6A8711D933DAB5349AA}；二为利用JAVA打造一个迭代方法可视化软件。该软件允许用户自主输入不同的方程并选择不同迭代策略来执行迭代求解操作，此外我的软件还提供了相关的指标来深入分析各个迭代方法；三是通过数值实验的方法来比较不同迭代方法在收敛速度和稳定性的表现。
+	线性方程组当今在深度学习大模型训练领域应用广泛，利用高效精准的方程组求解算法可以显著增加模型训练的效率和成功率。不同于线性代数中经典解法——克莱姆法则的多次矩阵运算带来的低效，方程组的直接解法为小型稠密矩阵提供了求解方案，方程组的迭代解法则给大型稀疏矩阵的求解带来了巨大的便利。
+	
+	本报告的核心任务包含以下三点：一是研究课内外常见的数值解法\cite{SSBDA84C6D76690EA6A8711D933DAB5349AA}；二为利用JAVA打造一个方程（组）求解可视化软件。该软件允许用户自主输入不同的方程（组）并选择不同策略来执行求解操作，此外我的软件还提供了相关的指标来分析各个迭代方法；三是通过数值实验的方法来比较不同迭代方法在收敛速度和稳定性的表现。
 	
 	
 	
-	\section{迭代解法的原理与流程}
+	\section{方程的迭代解法}
 	
 	本节着重介绍迭代法的原理，同时详细的介绍8种迭代法各自的基本思想、数学公式、算法步骤、收敛性分析与优缺点。
 	
@@ -239,10 +244,51 @@ sorting=none         % 按引用顺序排序
 	压缩映射是针对一个函数映射在某一个闭区间上而言的。若在一个区间内每经过一次映射变换，各个点依旧在这个区间内并且它们之间的距离都缩小，我们则称该映射在该区间是一个压缩映射。
 	
 	更加严谨的来说，我们有一个映射 \(g(x)\) 和一个区间 \(I = [x_1, x_2]\)。若在该区间 \(I\) 内任意两点 \(a, b\)，在经过映射后的 \(g(a)\) 和 \(g(b)\) 依旧在区间 \(I\) 内，并且距离缩小——即存在一个 \(L < 1\) 使得：
-	\[
-	|g(a) - g(b)| \leq L |a - b|
-	\]
-	则我们称该映射为压缩映射。这个常数 \(L\) 被称为压缩因子。\(L < 1\) 这个条件保证了“收缩”的发生。
+	\begin{equation}
+		|g(a) - g(b)| \leq L |a - b|
+	\end{equation}
+	
+	则我们称该映射为压缩映射。这个常数 \(L\) 被称为压缩因子。\(L < 1\) 这个条件保证了“收缩”的发生，压缩映射示例见图\ref{fig:four_pictures}。
+
+	\begin{figure}[htbp] % 'h'ere, 't'op, 'b'ottom, 'p'age of floats
+		\centering % 整体居中
+		
+		% --- 第一行图片 ---
+		\begin{subfigure}[b]{0.48\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/ys (1).png}
+			\caption{迭代0次（初始状态）}
+			\label{fig:top_left}
+		\end{subfigure}
+		\hfill % 在两个子图之间插入一个弹性的水平空白
+		\begin{subfigure}[b]{0.48\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/ys (2).png}
+			\caption{迭代2次}
+			\label{fig:top_right}
+		\end{subfigure}
+		
+		% 在两行图片之间添加一些垂直间距
+		\vskip\baselineskip 
+		
+		% --- 第二行图片 ---
+		\begin{subfigure}[b]{0.48\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/ys (3).png}
+			\caption{迭代4次}
+			\label{fig:bottom_left}
+		\end{subfigure}
+		\hfill % 在两个子图之间插入一个弹性的水平空白
+		\begin{subfigure}[b]{0.48\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/ys (4).png}
+			\caption{迭代8次}
+			\label{fig:bottom_right}
+		\end{subfigure}
+		
+		\caption{压缩映射示意图(方程 g(x)=0.5x+2 在不同迭代次数下压缩程度)}
+		\label{fig:four_pictures}
+	\end{figure}
 	
 	\subsubsection{压缩映射的性质}
 	
@@ -253,13 +299,15 @@ sorting=none         % 按引用顺序排序
 	\subsubsection{如何判断压缩映射}
 	
 	根据微积分中的中值定理，我们知道对于任意的 \(x\) 和 \(y\)，在它们之间必定存在一个点 \(c\)，使得：
-	\[
-	g(x) - g(y) = g'(c) \cdot (x - y)
-	\]
+	\begin{equation}
+		g(x) - g(y) = g'(c) \cdot (x - y)
+	\end{equation}
+	
 	两边取绝对值得到：
-	\[
-	|g(x) - g(y)| = |g'(c)| \cdot |x - y|
-	\]
+	\begin{equation}
+		|g(x) - g(y)| = |g'(c)| \cdot |x - y|
+	\end{equation}
+	
 	现在将这个公式与压缩映射的定义 \(|g(x) - g(y)| \leq L |x - y|\) 我们不难发现：\(|g'(x)|\) 的大小决定了映射是压缩还是发散的。如果我们能在一个包含根的区间 \(I\) 上找到一个常数 \(L < 1\)，使得对区间 \(I\) 内所有的 \(x\)，都有 \(|g'(x)| \leq L\)，那么 \(g(x)\) 在该区间上就是一个压缩映射。
 	
 	
@@ -279,10 +327,9 @@ sorting=none         % 按引用顺序排序
 	\noindent{\heiti 数学公式}
 	
 	普通迭代法的迭代公式为：
-	\(
-	x_{k+1} = g(x_k), \quad k = 0, 1, 2, \ldots
-	\)
-	
+	\begin{equation}
+			x_{k+1} = g(x_k), \quad k = 0, 1, 2, \ldots
+	\end{equation}
 	\vspace{1em}
 	\noindent{\heiti 算法步骤}
 	
@@ -292,7 +339,7 @@ sorting=none         % 按引用顺序排序
 		\indent\textbf{4.} 判断是否满足收敛条件 \(|x_{k+1} - x_k| < \epsilon\)。若满足，则停止迭代，\(x_{k+1}\) 即为所求解的近似根。\\
 		\indent\textbf{5.} 若不满足收敛条件，则令 \(x_k = x_{k+1}\)，返回第3步继续迭代。
 	
-	\vspace{1em}\newpage
+	\vspace{1em}
 	\noindent{\heiti 收敛性分析}
 	
 	不动点迭代法的收敛性与迭代函数 \(g(x)\) 的性质密切相关。根据上述的压缩映射相关知识，我们知道只有迭代函数 \(g(x)\) 满足以下两个条件迭代过程才收敛：
@@ -334,7 +381,7 @@ sorting=none         % 按引用顺序排序
 		\label{fig:11} 
 	\end{figure}
 	
-	
+	\newpage
 	\subsubsection{牛顿迭代法}
 	
 	\noindent{\heiti 基本思想}
@@ -342,30 +389,35 @@ sorting=none         % 按引用顺序排序
 	从普通迭代法的收敛性理论我们知道，迭代函数的导数绝对值越小，收敛速度就越快。牛顿法正是基于这一思想，改造迭代函数将导数的绝对值变为零以快速收敛。
 	
 	我们将原始方程 \(f(x)=0\) 转化为等价的不动点形式 \(x = g(x)\)。为了引入可调节的参数，我们构造一个更普遍的迭代函数：
-	\[
-	g(x) = x + \alpha(x)f(x)
-	\]
+	\begin{equation}
+		g(x) = x + \alpha(x)f(x)
+	\end{equation}
+	
 	其中 \(\alpha(x)\) 是一个待定的函数。只要 \(f(x)=0\)，这个形式就等价于 \(x=g(x)\)。由上述推理可知我们希望在根 \(x_0\) 附近有 \(|g'(x)| \approx 0\)。对 \(g(x)\) 求导可得：
-	\[
-	g'(x) = 1 + \alpha'(x)f(x) + \alpha(x)f'(x)
-	\]
+	\begin{equation}
+		g'(x) = 1 + \alpha'(x)f(x) + \alpha(x)f'(x)
+	\end{equation}
+	
 	在根 \(x_0\) 附近，由于 \(f(x)\approx0\)，上式简化为：
-	\[
-	g'(x) = 1 + \alpha(x)f'(x)
-	\]
+	\begin{equation}
+		g'(x) = 1 + \alpha(x)f'(x)
+	\end{equation}
+	
 	我们令 \(g'(x) = 0\)，解得：
-	\[
-	\alpha(x) = -\frac{1}{f'(x)}
-	\]
+	\begin{equation}
+		\alpha(x) = -\frac{1}{f'(x)}
+	\end{equation}
+	
 	由此，我们选择 \(\alpha(x) = -\frac{1}{f'(x)}\) 作为我们的迭代函数，便得到了牛顿迭代法。它通过每一步都选取能让迭代函数导数趋近于零的方向，从而实现了局部二阶收敛。
 	
 	\vspace{1em}
 	\noindent{\heiti 数学公式}
 	
 	我们将 \(\alpha(x_k) = -\frac{1}{f'(x_k)}\) 代入迭代公式 \(x_{k+1} = x_k + \alpha(x_k)f(x_k)\)，即可得到牛顿法的迭代公式：
-	\[
-	x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}
-	\]
+	\begin{equation}
+		x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}
+	\end{equation}
+	
 	\vspace{1em}
 	\noindent{\heiti 算法步骤}
 	
@@ -429,9 +481,9 @@ sorting=none         % 按引用顺序排序
 	\noindent{\heiti 数学公式}
 	
 	迭代公式为：
-	\[
-	x_{k+1} = x_k - \frac{f(x_k)}{f'(x_0)}
-	\]
+	\begin{equation}
+		x_{k+1} = x_k - \frac{f(x_k)}{f'(x_0)}
+	\end{equation}
 	
 	\vspace{1em}
 	\noindent{\heiti 算法步骤}
@@ -479,7 +531,7 @@ sorting=none         % 按引用顺序排序
 		\caption{简化切线法软件运行截图}
 		\label{fig:44} 
 	\end{figure}
-	
+	\newpage
 	\subsubsection{修正切线法}
 	
 	\noindent{\heiti 基本思想}
@@ -490,9 +542,9 @@ sorting=none         % 按引用顺序排序
 	\noindent{\heiti 数学公式}
 	
 	迭代公式为：
-	\[
-	x_{k+1} = x_k - \frac{f(x_k)}{m_j}
-	\]
+	\begin{equation}
+		x_{k+1} = x_k - \frac{f(x_k)}{m_j}
+	\end{equation}
 	其中斜率 \(m_j\) 会定期更新。这里我的程序设置了一个更新间隔 \(N\)，当迭代次数 \(k\) 是 \(N\) 的倍数时才更新斜率 \(m_j = f'(x_k)\) 。
 	
 	\vspace{1em}
@@ -552,9 +604,9 @@ sorting=none         % 按引用顺序排序
 	\noindent{\heiti 数学公式}
 	
 	迭代公式为：
-	\[
-	x_{k+1} = x_k - \lambda \frac{f(x_k)}{f'(x_k)}
-	\]
+	\begin{equation}
+		x_{k+1} = x_k - \lambda \frac{f(x_k)}{f'(x_k)}
+	\end{equation}
 	其中 \(\lambda \in (0, 1]\) 是通过搜索选择的，以确保 \(|f(x_{k+1})| < |f(x_k)|\) 成立。
 	
 	\vspace{1em}
@@ -619,9 +671,9 @@ sorting=none         % 按引用顺序排序
 	\noindent{\heiti 数学公式}
 	
 	迭代公式为：
-	\[
-	x_{k+1} = x_k - \frac{f(x_k)(x_k - x_0)}{f(x_k) - f(x_0)}
-	\]
+	\begin{equation}
+		x_{k+1} = x_k - \frac{f(x_k)(x_k - x_0)}{f(x_k) - f(x_0)}
+	\end{equation}
 	
 	\vspace{1em}
 	\noindent{\heiti 算法步骤}
@@ -681,9 +733,9 @@ sorting=none         % 按引用顺序排序
 	\noindent{\heiti 数学公式}
 	
 	迭代公式为：
-	\[
-	x_{k+1} = x_k - \frac{f(x_k)(x_k - x_{k-1})}{f(x_k) - f(x_{k-1})}
-	\]
+	\begin{equation}
+		x_{k+1} = x_k - \frac{f(x_k)(x_k - x_{k-1})}{f(x_k) - f(x_{k-1})}
+	\end{equation}
 	
 	\vspace{1em}
 	\noindent{\heiti 算法步骤}
@@ -736,34 +788,38 @@ sorting=none         % 按引用顺序排序
 	\noindent{\heiti 基本思想}
 	
 	艾特肯法可以看作是双点弦截法的一种变形，艾特肯法利用由不动点迭代 \(x_{k+1} = g(x_k)\) 产生的一系列点来执行双点弦截法。双点弦截法的迭代公式是利用两个点 \((x_k, f(x_k))\) 和 \((x_{k+1}, f(x_{k+1}))\) 构造割线来求根：
-	\[
-	x_{new} = x_{k+1} - \frac{f(x_{k+1})(x_{k+1} - x_k)}{f(x_{k+1}) - f(x_k)}
-	\]
+	\begin{equation}
+		x_{new} = x_{k+1} - \frac{f(x_{k+1})(x_{k+1} - x_k)}{f(x_{k+1}) - f(x_k)}
+	\end{equation}
 	将\(x_k\)、\(x_{k+1}\)两个点代入函数 \(f(x) = x - g(x)\)，可得：
-	\begin{align*}
+	\begin{equation}
+		\begin{aligned}
 		f(x_k) = x_k - g(x_k) = x_k - x_{k+1} \\
 		f(x_{k+1}) = x_{k+1} - g(x_{k+1}) = x_{k+1} - x_{k+2}
-	\end{align*}
+	\end{aligned}
+	\end{equation}
 	现在，我们将上述结果代回双点弦截法的公式中，求出的 \(x_{new}\) 即为加速后的新迭代值 \(\hat{x}_k\):
-	\[
-	\hat{x}_k = x_{k+1} - \frac{(x_{k+1} - x_{k+2})(x_{k+1} - x_k)}{(x_{k+1} - x_{k+2}) - (x_k - x_{k+1})}
-	\]
+	\begin{equation}
+		\hat{x}_k = x_{k+1} - \frac{(x_{k+1} - x_{k+2})(x_{k+1} - x_k)}{(x_{k+1} - x_{k+2}) - (x_k - x_{k+1})}
+	\end{equation}
 	对上式分母进行化简：\((x_{k+1} - x_{k+2}) - (x_k - x_{k+1}) = -(x_{k+2} - 2x_{k+1} + x_k)\)。随后我们对整个表达式进行代数变换：
-	\begin{align*}
+	\begin{equation}
+		\begin{split}
 		\hat{x}_k &= \frac{x_{k+1}((2x_{k+1} - x_k - x_{k+2}) - (x_{k+1} - x_{k+2})) - x_k(x_{k+1}-x_{k+2})}{2x_{k+1} - x_k - x_{k+2}} \\
 		&= \frac{x_k x_{k+2} - x_{k+1}^2}{x_{k+2} - 2x_{k+1} + x_k} \\
 		&= \frac{x_k(x_{k+2} - 2x_{k+1} + x_k) - (x_k^2 - 2x_k x_{k+1} + x_{k+1}^2)}{x_{k+2} - 2x_{k+1} + x_k} \\
 		&= x_k - \frac{(x_{k+1} - x_k)^2}{x_{k+2} - 2x_{k+1} + x_k}
-	\end{align*}
+	\end{split}
+	\end{equation}
 	最终得到的这个公式就是艾特肯加速法的标准形式。它利用基础迭代产生的连续三点（\(x_k, x_{k+1}, x_{k+2}\)）来构造一个收敛更快的迭代值。
 	
 	\vspace{1em}
 	\noindent{\heiti 数学公式}
 	
 	给定一个由基础迭代 \(x_{i+1}=g(x_i)\) 产生的序列，艾特肯加速序列 \(\{\hat{x}_k\}\) 的计算公式为：
-	\[
-	\hat{x}_k = x_k - \frac{(x_{k+1} - x_k)^2}{x_{k+2} - 2x_{k+1} + x_k}
-	\]
+	\begin{equation}
+		\hat{x}_k = x_k - \frac{(x_{k+1} - x_k)^2}{x_{k+2} - 2x_{k+1} + x_k}
+	\end{equation}
 	
 	\vspace{1em}
 	\noindent{\heiti 算法步骤}
@@ -786,15 +842,6 @@ sorting=none         % 按引用顺序排序
 	\indent\textbf{·}{缺点}：\\
 	\indent\indent\textbf{-} 每次迭代的计算复杂性增加。\\
 	\indent\indent\textbf{-} 分母 \(x_{k+2} - 2x_{k+1} + x_k\) 接近于零时会出现数值不稳定问题。
-	
-	\vspace{1em}
-	\noindent{\heiti 优缺点}
-	
-	\textbf{·} {优点}：算法简单朴素，易于理解。\\
-	\indent\textbf{·}{缺点}：\\
-	\indent\indent\textbf{-} 迭代函数的构造不唯一，不同的构造方式可能导致收敛性不同，甚至发散。\\
-	\indent\indent\textbf{-} 收敛速度通常较慢，仅为一阶收敛。\\
-	\indent\indent\textbf{-} 对初值的选取比较敏感，需要选取在根附近的初值才能保证收敛。
 	
 	
 		\vspace{1em}
@@ -822,7 +869,548 @@ sorting=none         % 按引用顺序排序
 		\label{fig:33} 
 	\end{figure}
 	
+	\section{线性方程组的直接解法}
+	
+	\subsection{消元法综述}
+	
+	\subsubsection{消元法介绍}
+	
+	消元法是将方程组中的一方程的未知数用含有另一未知数的代数式表示，并将其带入到另一方程中，这就消去了一未知数，得到一解；或将方程组中的一方程倍乘某个常数加到另外一方程中去，也可达到消去一未知数的目的。
+	
+	更本质的来看，消元法通过一系列的初等行变换，将线性方程组的增广矩阵逐步转化为一个更容易求解的等价矩阵，然后通过回代求解出未知数。
+	
+	\begin{equation} \label{eq:gauss_elimination}
+		\mathbf{A} =
+		\left[
+		\begin{array}{ccc}
+			a_{11} & a_{12} & a_{13}  \\
+			a_{21} & a_{22} & a_{23}  \\
+			a_{31} & a_{32} & a_{33} 
+		\end{array}
+		\right]
+		\quad \xrightarrow{\text{高斯消元}} \quad
+		\mathbf{U} =
+		\left[
+		\begin{array}{ccc}
+			u_{11} & u_{12} & u_{13}  \\
+			0 & u_{22} & u_{23}  \\
+			0 & 0 & u_{33} 
+		\end{array}
+		\right]
+	\end{equation}
+	
+	\subsubsection{消元法核心理论}
+	
+	\textbf{·} {两方程互换，解不变}\\
+	\indent\textbf{·} {一方程乘以非零数 \(k\) 解不变}\\
+	\indent\textbf{·} {一方程乘以数 \(k\) 加上另一方程，解不变}
+	
+	这三种变换对应于对增广矩阵的初等行变换
+	
+	\subsubsection{消元法步骤}
+	
+	\textbf{·} {\textbf{消元}}\\
+	\indent\indent\textbf{-} 将线性方程组写成增广矩阵的形式。\\
+	\indent\indent\textbf{-} 通过一系列的初等行变换(在上文中提及，教材中采用l作为每一行需要除的分母，以此完成行变换)，从第一列开始，逐列将主元下方的元素变为零。\\
+	\indent\indent\textbf{-}重复执行第二步直到矩阵变为上三角矩阵。\\
+	
+	\indent\textbf{·} {\textbf{回代}}\\
+	\indent\indent\textbf{-} 从阶梯形矩阵的最后一行开始，该行只包含一个未知数，可以直接求解。\\
+	\indent\indent\textbf{-} 将求得的解代入倒数第二行，解出另一个未知数。\\
+	\indent\indent\textbf{-}依次向上回代，直到求出所有未知数的解。
+	
+	\subsubsection{优缺点}
+	
+	\indent\textbf{·}{优点}：对于任何有唯一解或有无穷多解的线性方程组，理论上总能求得其精确解。\\
+	\indent\textbf{·}{缺点}：\\
+	\indent\indent\textbf{-} 计算量大，O(n³) 级别。\\
+	\indent\indent\textbf{-} 舍入误差会出现累积并影响精度。
+
+	\subsection{详细消元法}
+	
+	下面我会简单的介绍一下各个消元法并展示我程序的求解图片，相关的完整代码在附录B中。
+	
+	\subsubsection{高斯消元法}
+	
+	\noindent{\heiti 介绍}
+	
+	高斯消元法在每次消元的时候本行不做处理，即当前行保持原始状态，不会同下面即将要说的克劳特消元法一样进行对角元归一。
+	
+	\vspace{1em}
+	\noindent{\heiti 矩阵变换公式}
+	
+	\begin{equation}
+		[A|\mathbf{b}] =
+		\left[
+		\begin{array}{ccc|c}
+			a_{11} & a_{12} & a_{13} & b_1 \\
+			a_{21} & a_{22} & a_{23} & b_2 \\
+			a_{31} & a_{32} & a_{33} & b_3 
+		\end{array}
+		\right]
+		\quad \xrightarrow{\text{正向消元}} \quad
+		[U|\mathbf{z}] =
+		\left[
+		\begin{array}{ccc|c}
+			u_{11} & u_{12} & u_{13} & z_1 \\
+			0 & u_{22} & u_{23} & z_2 \\
+			0 & 0 & u_{33} & z_3
+		\end{array}
+		\right]
+	\end{equation}
+	
 	\newpage
+	\noindent{\heiti 收敛性}
+	
+	\indent\textbf{-} 在没有舍入误差且对角元不为0的理想情况下，高斯消元法总能通过有限步运算得到精确解。\\
+	\indent\textbf{-} 当当前步的对角线元素为0或绝对值很小时，会导致计算产生巨大的舍入误差，使得算法非常不稳定。
+	
+	\vspace{1em}
+	\noindent{\heiti 程序运行截图}
+	
+	下图为程序在利用高斯消元法求解线性方程组时的截图，详细代码见附录B。
+	
+	\begin{figure}[htbp] % 'h'ere, 't'op, 'b'ottom, 'p'age of floats
+		\centering % 整体居中
+		
+		% --- 第一行图片 ---
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gs (4).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gs (1).png}
+		\end{subfigure}
+		
+		
+		% --- 第二行图片 ---
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gs (2).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gs (3).png}
+		\end{subfigure}
+		
+		\caption{高斯消元法程序运行截图}
+		\label{fig:gs}
+	\end{figure}
+	
+	
+	\subsubsection{克劳特消元法}
+	
+	\noindent{\heiti 介绍}
+	
+	克劳特消元法在每次进行消元的时候会首先将本行的对角元素进行除法，使得对角元素值为1。这样在得到上三角矩阵后方便进行回代操作。
+	
+	\vspace{1em}
+	\noindent{\heiti 矩阵变换公式}
+	
+	\begin{equation}
+		[A|\mathbf{b}] =
+		\left[
+		\begin{array}{ccc|c}
+			a_{11} & a_{12} & a_{13} & b_1 \\
+			a_{21} & a_{22} & a_{23} & b_2 \\
+			a_{31} & a_{32} & a_{33} & b_3 
+		\end{array}
+		\right]
+		\quad \xrightarrow{\text{正向消元}} \quad
+		[U|\mathbf{z}] =
+		\left[
+		\begin{array}{ccc|c}
+			1 & u_{12} & u_{13} & z_1 \\
+			0 & 1 & u_{23} & z_2 \\
+			0 & 0 & 1 & z_3
+		\end{array}
+		\right]
+	\end{equation}
+	
+	\vspace{1em}
+	\noindent{\heiti 收敛性}
+	
+	\indent\textbf{-} 与高斯消元法类似，克劳特法同样存在数值不稳定的问题。
+	
+	\vspace{1em}
+	\noindent{\heiti 程序运行截图}
+	
+	下图为程序在利用克劳特消元法求解线性方程组时的截图，详细代码见附录B。
+	
+	\begin{figure}[htbp] % 'h'ere, 't'op, 'b'ottom, 'p'age of floats
+		\centering % 整体居中
+		
+		% --- 第一行图片 ---
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/klt (1).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/klt (2).png}
+		\end{subfigure}
+		
+		
+		% --- 第二行图片 ---
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/klt (3).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/klt (4).png}
+		\end{subfigure}
+		
+		\caption{克劳特消元法程序运行截图}
+		\label{fig:klt}
+	\end{figure}
+	
+	\subsubsection{高斯列主元素消元法}
+	
+	\noindent{\heiti 介绍}
+	
+	该方法总体思路与高斯消元法一致，只是在对每行处理的时候都会遍历该行对角元素所在的列并把找到的最大元素所在的行与当前行进行交换，保证当前行对角元素最大。
+	
+	\vspace{1em}
+	\noindent{\heiti 矩阵变换公式}
+	
+	\begin{equation}
+		A\mathbf{x}=\mathbf{b} \quad \xrightarrow{\text{行交换}} \quad PA\mathbf{x}=P\mathbf{b} \quad \xrightarrow{\text{消元}} \quad 
+		[PU|P\mathbf{z}] =
+		\left[
+		\begin{array}{ccc|c}
+			u_{11} & u_{12} & u_{13} & z_1 \\
+			0 & u_{22} & u_{23} & z_2 \\
+			0 & 0 & u_{33} & z_3
+		\end{array}
+		\right]
+	\end{equation}
+	
+	\vspace{1em}
+	\noindent{\heiti 收敛性}
+	
+	\textbf{-} 通过选取较大的主元，可以有效避免除以一个很小的数，从而抑制舍入误差的增长。\\
+	\indent\textbf{-} 只要矩阵是非奇异的，列主元法即可求出结果。\\
+	\indent\textbf{-} 这是目前求解小型稠密线性方程组最常用、最稳健的方法。
+	
+	\vspace{1em}
+	\noindent{\heiti 程序运行截图}
+	
+	下图为程序在利用列主元素消元法求解线性方程组时的截图，详细代码见附录B。
+	
+	\begin{figure}[htbp] % 'h'ere, 't'op, 'b'ottom, 'p'age of floats
+		\centering % 整体居中
+		
+		% --- 第一行图片 ---
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gsl (1).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gsl (2).png}
+		\end{subfigure}
+		
+		
+		% --- 第二行图片 ---
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gsl (3).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gsl (4).png}
+		\end{subfigure}
+		
+		\caption{高斯列主元消元法程序运行截图}
+		\label{fig:gsl}
+	\end{figure}
+	
+	\subsubsection{高斯全主元素消元法}
+	
+	\noindent{\heiti 介绍}
+	
+	该方法总体思路与高斯消元法一致，只是在对每行处理的时候都会遍历未处理的整个矩阵元素并把找到的最大元素所在的位置通过行交换与列交换换到当前处理的对角元处，保证当前行对角元素全局最大。
+	
+	\vspace{1em}
+	\noindent{\heiti 矩阵变换公式}
+	
+	\begin{equation}
+		A\mathbf{x}=\mathbf{b} \quad \xrightarrow{\text{行列交换}} \quad PQA\mathbf{x}=P\mathbf{b} \quad \xrightarrow{\text{消元}} \quad 
+		[PQU|P\mathbf{z}] =
+		\left[
+		\begin{array}{ccc|c}
+			u_{11} & u_{12} & u_{13} & z_1 \\
+			0 & u_{22} & u_{23} & z_2 \\
+			0 & 0 & u_{33} & z_3
+		\end{array}
+		\right]
+	\end{equation}
+	
+	\vspace{1em}
+	\noindent{\heiti 收敛性}
+	
+	\textbf{-} 在所有高斯消元法的变种中，全主元法对舍入误差的控制效果最好。\\
+	\indent\textbf{-} 因为全主元素法需要多次寻找全局最大值，其搜索开销远大于列主元法。
+	
+	\vspace{1em}
+	\noindent{\heiti 程序运行截图}
+	
+	下图为程序在利用全主元素消元法求解线性方程组时的截图，详细代码见附录B。
+	
+	\begin{figure}[htbp] % 'h'ere, 't'op, 'b'ottom, 'p'age of floats
+		\centering % 整体居中
+		
+		% --- 第一行图片 ---
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gsq (1).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gsq (2).png}
+		\end{subfigure}
+		
+		
+		% --- 第二行图片 ---
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gsq (3).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gsq (4).png}
+		\end{subfigure}
+		
+		\caption{高斯全主元素消元法程序运行截图}
+		\label{fig:gsq}
+	\end{figure}
+	
+	\section{线性方程组的迭代解法}
+	
+	\subsection{线性方程组的迭代法综述}
+	
+	\subsubsection{线性方程组的迭代法介绍}
+	
+	迭代法从一个初始的近似解出发，通过迭代公式反复计算，逐步逼近方程组精确解。这里面确保收敛的判定依据依旧是上文在方程的迭代解法中提到的压缩映射，只要一个矩阵的谱半径小于1就可以保证方法收敛。这里的谱半径衡量的是矩阵映射变换完成后各个维度的变化最大值，只要该值小于1就表明该矩阵对于所有维度的映射都是压缩的，也就说明空间内的所有点都在向一个点靠近。
+	
+	\begin{equation} \label{eq:iteration_step}
+		\mathbf{x}^{(k)} =
+		\begin{pmatrix}
+			x_1^{(k)} \\
+			x_2^{(k)} \\
+			\vdots \\
+			x_n^{(k)}
+		\end{pmatrix}
+		\quad \xrightarrow{\text{迭代公式 } \mathbf{x}^{(k+1)} = \mathbf{B}\mathbf{x}^{(k)} + \mathbf{f}} \quad
+		\mathbf{x}^{(k+1)} =
+		\begin{pmatrix}
+			x_1^{(k+1)} \\
+			x_2^{(k+1)} \\
+			\vdots \\
+			x_n^{(k+1)}
+		\end{pmatrix}
+	\end{equation}
+	
+	\subsubsection{消元法步骤}
+	
+	\textbf{·} {\textbf{构造迭代格式：}}将原方程组 \(Ax = b\) 变形为一个等价的形式 \(x = Bx + f\)，其中 \(B\) 称为迭代矩阵。\\	
+	\indent\textbf{·} {\textbf{选取初始向量：}}选择一个向量并从此作为迭代的起点。\\
+	\indent\textbf{·} {\textbf{进行迭代：}}根据迭代公式 \(x(k+1) = Bx(k) + f\)，从 \(x(0)\) 开始，依次计算 \(x(1)\), \(x(2)\), \(x(3)\), ...\\
+	\indent\textbf{·} {\textbf{判断收敛：}}每次迭代后检查是否满足收敛条件并选择停机或者继续执行第三步。\\
+	
+	\subsubsection{优缺点}
+	
+	\indent\textbf{·}{优点}：\\
+	\indent\indent\textbf{-} 计算量小，迭代的计算量远小于直接法。\\
+	\indent\indent\textbf{-} 舍入误差不会累积。\\
+	\indent\textbf{·}{缺点}：\\
+	\indent\indent\textbf{-} 不保证收敛,收敛性与迭代矩阵 \( B\) 的性质密切相关。\\
+	\indent\indent\textbf{-} 得到的是近似解，而非理论上的精确解。
+	
+	
+	\subsection{详细迭代方法}
+	
+	\subsubsection{雅可比迭代法}
+	
+	\noindent{\heiti 介绍}
+	
+	雅可比迭代法是一种基本的迭代方法。它的思想很类似前文讲到的方程的迭代解法，在每次计算新的向量\(x_{k+1}\)过程中，它会利用上一次的迭代结果\(x_{k}\),并将这个向量输入矩阵进行映射。由于各个分量的计算是相互独立的，因此该方法非常适合并行计算。
+	
+	\vspace{0.5em}
+	\noindent{\heiti 矩阵迭代公式}
+	
+	\indent\textbf{-} {\textbf{矩阵形式}}: 
+	\begin{equation}
+		\mathbf{x}^{(k+1)} = -\mathbf{D}^{-1}(\mathbf{L} + \mathbf{U})\mathbf{x}^{(k)} + \mathbf{D}^{-1}\mathbf{b}
+	\end{equation}
+	\indent\textbf{-} {\textbf{分量形式}}:
+	\begin{equation}
+		x_i^{(k+1)} = \frac{1}{a_{ii}} \left( b_i - \sum_{j \neq i} a_{ij}x_j^{(k)} \right), \quad i=1, 2, \dots, n
+	\end{equation}
+	
+	\noindent{\heiti 收敛性}
+	
+	\indent\textbf{-} {\textbf{充要条件}}: 迭代法收敛的充要条件是迭代矩阵的谱半径小于1。对于雅可比法，即 $\rho(\mathbf{B}_J) < 1$，其中 $\mathbf{B}_J = -\mathbf{D}^{-1}(\mathbf{L} + \mathbf{U})$。 \\
+	\indent\textbf{-} {\textbf{充分条件}}: 如果系数矩阵 A 是严格对角占优矩阵，则雅可比迭代法必定收敛。\\
+	\indent\textbf{-} {\textbf{充分条件}}: 如果系数矩阵 A 是对角占优矩阵且不可约，则雅可比迭代法必定收敛。\\
+	\indent\textbf{-} {\textbf{充分条件}}: 如果迭代矩阵 $\mathbf{B}_J$ 的范数小于1则雅可比迭代法必定收敛。
+	
+	\vspace{0.5em}
+	\noindent{\heiti 程序运行截图}
+	
+	下图为程序在利用雅克比迭代法求解线性方程组时的截图，
+	\begin{figure}[h] % 'h'ere, 't'op, 'b'ottom, 'p'age of floats
+		\centering % 整体居中
+		
+		% --- 第一行图片 ---
+		\begin{subfigure}[b]{0.4\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/ykb (1).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.4\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/ykb (2).png}
+		\end{subfigure}
+		
+		
+		% --- 第二行图片 ---
+		\begin{subfigure}[b]{0.4\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/ykb (3).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.4\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/ykb (4).png}
+		\end{subfigure}
+		
+		\caption{雅可比迭代法程序运行截图}
+		\label{fig:ykb}
+	\end{figure}
+	
+	\subsubsection{高斯-赛德尔迭代法}
+	
+	\noindent{\heiti 介绍}
+	
+	高斯-赛德尔法是雅可比法的一种改进型。它在计算第 $k+1$ 次迭代的第 $i$ 个分量 $x_i^{(k+1)}$ 时，会立即使用在同一次迭代中已经计算出的新分量 $x_1^{(k+1)}, \dots, x_{i-1}^{(k+1)}$。这种策略使得它通常比雅可比法收敛得更快，但也因为计算存在依赖关系所以不适合并行处理。
+	
+	\vspace{0.5em}
+	\noindent{\heiti 矩阵迭代公式}
+
+	\indent\textbf{-} {\textbf{矩阵形式}}:
+	\begin{equation}
+		\mathbf{x}^{(k+1)} = -(\mathbf{D} + \mathbf{L})^{-1}\mathbf{U}\mathbf{x}^{(k)} + (\mathbf{D} + \mathbf{L})^{-1}\mathbf{b}
+	\end{equation}
+	\indent\textbf{-} {\textbf{分量形式}}:
+	\begin{equation}
+		x_i^{(k+1)} = \frac{1}{a_{ii}} \left( b_i - \sum_{j < i} a_{ij}x_j^{(k+1)} - \sum_{j > i} a_{ij}x_j^{(k)} \right), \quad i=1, 2, \dots, n
+	\end{equation}
+	
+	\noindent{\heiti 收敛性}
+	
+	\indent\textbf{-} {\textbf{充要条件}}: 迭代法收敛的充要条件是迭代矩阵的谱半径小于1。对于雅可比法，即 $\rho(\mathbf{B}_{GS}) < 1$，其中 $\mathbf{B}_{GS} = -(\mathbf{D} + \mathbf{L})^{-1}\mathbf{U}$。 \\
+	\indent\textbf{-} {\textbf{充分条件}}: 如果系数矩阵 A 是严格对角占优矩阵，则高斯-赛德尔迭代法必定收敛。\\
+	\indent\textbf{-} {\textbf{充分条件}}: 如果系数矩阵 A 是对角占优矩阵且不可约，高斯-赛德尔迭代法必定收敛。\\
+	\indent\textbf{-} {\textbf{充分条件}}: 如果迭代矩阵 $\mathbf{B}_{GS}$ 的范数小于1高斯-赛德尔迭代法必定收敛。\\
+	\indent\textbf{-} {\textbf{充分条件}}: 如果系数矩阵 $\mathbf{A}$ 是对称正定矩阵，则高斯-赛德尔迭代法必定收敛。
+	
+	\vspace{0.5em}
+	\noindent{\heiti 程序运行截图}
+	
+	下图为程序利用高斯-赛德尔迭代法求解线性方程组时的截图，详细代码见附录C。
+	
+	\begin{figure}[h] % 'h'ere, 't'op, 'b'ottom, 'p'age of floats
+		\centering % 整体居中
+		
+		% --- 第一行图片 ---
+		\begin{subfigure}[b]{0.4\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gssdr (1).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.4\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gssdr (2).png}
+		\end{subfigure}
+		
+		
+		% --- 第二行图片 ---
+		\begin{subfigure}[b]{0.4\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gssdr (3).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.4\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/gssdr (4).png}
+		\end{subfigure}
+		
+		\caption{高斯-赛德尔迭代法程序运行截图}
+		\label{fig:gssde}
+	\end{figure}
+	
+	\subsubsection{松弛迭代法}
+	
+	\noindent{\heiti 介绍}
+	
+	松弛迭代法是高斯-赛德尔法的一种改进。它在计算出高斯-赛德尔迭代值后将其与上一次的旧值进行加权平均作为新值。
+	
+	\vspace{0.5em}
+	\noindent{\heiti 矩阵迭代公式}
+
+	\indent\indent\textbf{-} {\textbf{矩阵形式}}: 
+	\begin{equation}
+		\mathbf{x}^{(k+1)} = (\mathbf{D} + \omega \mathbf{L})^{-1} \left[ ((1-\omega)\mathbf{D} - \omega \mathbf{U})\mathbf{x}^{(k)} + \omega \mathbf{b} \right]
+	\end{equation}
+	\indent\indent\textbf{-} {\textbf{分量形式}}: 设 $\tilde{x}_i^{(k+1)}$ 为高斯-赛德尔法计算出的中间值，则
+	\begin{equation}
+		\begin{aligned}
+			\tilde{x}i^{(k+1)} &= \frac{1}{a{ii}} \left( b_i - \sum_{j < i} a_{ij}x_j^{(k+1)} - \sum_{j > i} a_{ij}x_j^{(k)} \right) \\
+			x_i^{(k+1)} &= (1-\omega)x_i^{(k)} + \omega \tilde{x}_i^{(k+1)}
+		\end{aligned}
+	\end{equation}
+	
+	\noindent{\heiti 收敛性}
+	
+	\textbf{-} {\textbf{必要条件}}: SOR方法收敛的一个必要条件是松弛因子 $\omega$ 必须在 $(0, 2)$ 的范围内。\\
+	\indent\indent\textbf{-} {\textbf{分类}}: \\
+	\indent\indent\indent\textbf{-} 当 $0 < \omega < 1$ 时，称为 \textbf{低松弛法}。\\
+	\indent\indent\indent\textbf{-} 当 $\omega = 1$ 时，SOR方法为 \textbf{高斯-赛德尔法}。\\
+	\indent\indent\indent\textbf{-} 当 $1 < \omega < 2$ 时，称为 \textbf{超松弛法}，用于加速收敛。
+	\vspace{0.5em}
+	\noindent{\heiti 程序运行截图}
+	
+	下图为程序在利用松弛迭代法求解线性方程组时的截图，详细代码见附录C。
+	
+	\begin{figure}[h] % 'h'ere, 't'op, 'b'ottom, 'p'age of floats
+		\centering % 整体居中
+		
+		% --- 第一行图片 ---
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/sc (1).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/sc (2).png}
+		\end{subfigure}
+		
+		
+		% --- 第二行图片 ---
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/sc (3).png}
+		\end{subfigure}
+		\begin{subfigure}[b]{0.45\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{pic/sc (4).png}
+		\end{subfigure}
+		
+		\caption{松弛迭代法程序运行截图}
+		\label{fig:sc}
+	\end{figure}
+	
+	
+
 	\section{java软件实现}
 	
 	\subsection{总体设计}
@@ -928,7 +1516,7 @@ sorting=none         % 按引用顺序排序
 	
 	通过将抽象的公式转化为直观的动画和图，本报告连接了编程实践和理论学习，一定程度上减轻了第二章的学习任务，达到了预期的目标。
 	
-	最后，本人建议您可以从GitHub（\url{https://github.com/twx145/Numerical-Analysis/releases/tag/v1.0.1}）上下载最新软件。
+	最后，本人建议您可以从GitHub（\url{https://github.com/twx145/Numerical-Analysis/releases/tag/v2.5.0}）上下载最新软件。
 	
 	\subsection{展望}
 	
@@ -986,7 +1574,7 @@ sorting=none         % 按引用顺序排序
 	\markboth{附录}{}
 	
 	
-	\section{迭代部分完整代码}
+	\section{方程的迭代解法完整代码}
 	\markboth{附录}{}
 	
 	\subsubsection*{普通迭代法}
@@ -1072,8 +1660,7 @@ sorting=none         % 按引用顺序排序
 			double error_abs = Math.abs(x_curr - x_prev);
 			IterationState firstState = new IterationState(k, x_curr, x_prev, equation.getF().apply(x_curr), error_abs, Double.NaN);
 			x_prev_prev = x_prev;
-			x_prev = x_curr;
-			k++;
+			x_prev = x_curr;k++;
 			return firstState;
 		}
 		// --- 执行一次单点割线法迭代 ---
@@ -1087,33 +1674,6 @@ sorting=none         % 按引用顺序排序
 		}
 	\end{lstlisting}
 	
-	\subsubsection*{双点弦截法}
-	
-	\begin{lstlisting}[language=Java, caption={双点弦截法单步迭代核心逻辑}, label={lst:double-java}]
-		if (k == 0) {
-			k++;
-			return IterationState.initial(x_old, equation.getF().apply(x_old));
-		}
-		if (k == 1) {
-			double error_abs = Math.abs(x_curr - x_old);
-			IterationState state = new IterationState(k, x_curr, x_old, equation.getF().apply(x_curr), error_abs, Double.NaN);
-			x_older = x_old;
-			x_old = x_curr;
-			k++;
-			return state;
-		}
-		// --- 执行一次双点割线法迭代 ---
-		double fx_old = equation.getF().apply(x_old);
-		double fx_older = equation.getF().apply(x_older);
-		double denominator = fx_old - fx_older;
-		
-		if (Math.abs(denominator) < 1e-12) {
-			x_curr = Double.NaN;
-		} else {
-			x_curr = x_old - fx_old * (x_old - x_older) / denominator;
-		}
-	\end{lstlisting}
-
 	\subsubsection*{艾特肯迭代法}
 	
 	\begin{lstlisting}[language=Java, caption={艾特肯迭代法单步迭代核心逻辑}, label={lst:aitken-java}]
@@ -1124,12 +1684,10 @@ sorting=none         % 按引用顺序排序
 			k++;
 			return initialState;
 		}
-		
 		// --- 执行一次艾特肯加速迭代 ---
 		double x0_k = x_prev;
 		double x1_k = g.apply(x0_k);
-		double x2_k = g.apply(x1_k);
-		
+		double x2_k = g.apply(x1_k);		
 		double denominator = x2_k - 2 * x1_k + x0_k;
 		if (Math.abs(denominator) < 1e-12) {
 			x_curr = Double.NaN; 
@@ -1137,6 +1695,7 @@ sorting=none         % 按引用顺序排序
 			x_curr = x0_k - Math.pow(x1_k - x0_k, 2) / denominator;
 		}
 	\end{lstlisting}
+	
 	
 	\subsubsection*{牛顿下山法}
 	
@@ -1171,6 +1730,298 @@ sorting=none         % 按引用顺序排序
 			if (!found) {
 				x_curr = Double.NaN; 
 			}
+		}
+	\end{lstlisting}
+	
+	\newpage
+	\subsubsection*{双点弦截法}
+	
+	\begin{lstlisting}[language=Java, caption={双点弦截法单步迭代核心逻辑}, label={lst:double-java}]
+		if (k == 0) {
+			k++;
+			return IterationState.initial(x_old, equation.getF().apply(x_old));
+		}
+		if (k == 1) {
+			double error_abs = Math.abs(x_curr - x_old);
+			IterationState state = new IterationState(k, x_curr, x_old, equation.getF().apply(x_curr), error_abs, Double.NaN);
+			x_older = x_old;
+			x_old = x_curr;
+			k++;
+			return state;
+		}
+		// --- 执行一次双点割线法迭代 ---
+		double fx_old = equation.getF().apply(x_old);
+		double fx_older = equation.getF().apply(x_older);
+		double denominator = fx_old - fx_older;
+		
+		if (Math.abs(denominator) < 1e-12) {
+			x_curr = Double.NaN;
+		} else {
+			x_curr = x_old - fx_old * (x_old - x_older) / denominator;
+		}
+	\end{lstlisting}
+	
+	
+	\newpage
+	\section{线性方程组的直接解法完整代码}
+	\markboth{附录}{}
+	
+	\subsubsection*{克劳特消元法}
+	
+	\begin{lstlisting}[language=Java, caption={克劳特消元法核心逻辑}, label={lst:dampedNewton-java}]
+		// 消元
+		for (int i = 0; i < n; i++) {
+			double pivot = aug.getEntry(i, i);
+			if (Math.abs(pivot) < EPSILON) {
+				history.add(new MatrixState("错误: 主元 A(" + (i + 1) + "," + (i + 1) + ") 为零或过小，无法继续", aug.copy(), new int[]{i}));
+				return new DirectSolution(history, null); 
+			}
+			
+			// a. 归一化当前行，使主元变为1
+			if (Math.abs(pivot - 1.0) > EPSILON) { 
+				aug.setRowVector(i, aug.getRowVector(i).mapDivide(pivot));
+				String desc = String.format("归一化: R%d = R%d / %.3f", i + 1, i + 1, pivot);
+				history.add(new MatrixState(desc, aug.copy(), new int[]{i}));
+			}
+			
+			// b. 对当前主元下方的所有行进行消元
+			for (int j = i + 1; j < n; j++) {
+				double factor = aug.getEntry(j, i); 
+				if (Math.abs(factor) < EPSILON) continue; 
+				
+				// 执行行变换: Rj = Rj - factor * Ri
+				RealVector rowI = aug.getRowVector(i).mapMultiply(factor);
+				RealVector rowJ = aug.getRowVector(j).subtract(rowI);
+				aug.setRowVector(j, rowJ);
+				
+				String desc = String.format("行变换: R%d = R%d - (%.3f) * R%d", j + 1, j + 1, factor, i + 1);
+				history.add(new MatrixState(desc, aug.copy(), new int[]{i, j}));
+			}
+		}
+		history.add(new MatrixState("前向消元完成，形成主对角线为1的上三角矩阵", aug.copy(), null));		
+	\end{lstlisting}
+	
+	
+	
+	\newpage
+	
+	
+	\subsubsection*{高斯列主元素消元法}
+	
+	\begin{lstlisting}[language=Java, caption={高斯列主元素消元法核心逻辑}, label={lst:dampedNewton-java}]
+		// 消元
+		for (int i = 0; i < n; i++) {
+			int max = i;
+			for (int j = i + 1; j < n; j++) {
+				if (Math.abs(aug.getEntry(j, i)) > Math.abs(aug.getEntry(max, i))) {
+					max = j;
+				}
+			}
+			if (i != max) {
+				double[] temp = aug.getRow(i);
+				aug.setRow(i, aug.getRow(max));
+				aug.setRow(max, temp);
+				history.add(new MatrixState("行交换: R" + (i + 1) + " <-> R" + (max + 1), aug.copy(), new int[]{i, max}));
+			}
+			if (Math.abs(aug.getEntry(i, i)) < EPSILON) {
+				history.add(new MatrixState("错误: 主元过小, 矩阵奇异或接近奇异", aug.copy(), new int[]{i}));
+				return new DirectSolution(history, null);
+			}
+			for (int j = i + 1; j < n; j++) {
+				double factor = aug.getEntry(j, i) / aug.getEntry(i, i);
+				if (Math.abs(factor) < EPSILON) continue;
+				RealVector rowI = aug.getRowVector(i).mapMultiply(factor);
+				RealVector rowJ = aug.getRowVector(j).subtract(rowI);
+				aug.setRowVector(j, rowJ);
+				String desc = String.format("行变换: R%d = R%d - (%.3f) * R%d", j + 1, j + 1, factor, i + 1);
+				history.add(new MatrixState(desc, aug.copy(), new int[]{i, j}));
+			}
+		}
+		history.add(new MatrixState("前向消元完成，形成上三角矩阵", aug.copy(), null));
+	\end{lstlisting}
+	
+	
+	\newpage
+	
+	
+	\subsubsection*{高斯全主元素消元法}
+	
+	\begin{lstlisting}[language=Java, caption={高斯全主元素消元法核心逻辑}, label={lst:dampedNewton-java}]
+		// 消元 
+		for (int i = 0; i < n; i++) {
+			int pivotRow = i;
+			int pivotCol = i;
+			double maxVal = Math.abs(aug.getEntry(i, i));
+			
+			for (int row = i; row < n; row++) {
+				for (int col = i; col < n; col++) {
+					if (Math.abs(aug.getEntry(row, col)) > maxVal) {
+						maxVal = Math.abs(aug.getEntry(row, col));
+						pivotRow = row;
+						pivotCol = col;
+					}
+				}
+			}
+			// --- 行交换 ---
+			if (i != pivotRow) {
+				double[] temp = aug.getRow(i);
+				aug.setRow(i, aug.getRow(pivotRow));
+				aug.setRow(pivotRow, temp);
+				history.add(new MatrixState("行交换: R" + (i + 1) + " <-> R" + (pivotRow + 1), aug.copy(), new int[]{i, pivotRow}));
+			}
+			// --- 列交换 ---
+			if (i != pivotCol) {
+				RealVector temp = aug.getColumnVector(i);
+				aug.setColumnVector(i, aug.getColumnVector(pivotCol));
+				aug.setColumnVector(pivotCol, temp);
+				
+				int tempIndex = colIndices[i];
+				colIndices[i] = colIndices[pivotCol];
+				colIndices[pivotCol] = tempIndex;
+				
+				history.add(new MatrixState("列交换: C" + (i + 1) + " <-> C" + (pivotCol + 1) +
+				", 新列顺序: " + Arrays.toString(colIndices), aug.copy(), null));
+			}
+			
+			if (Math.abs(aug.getEntry(i, i)) < EPSILON) {
+				history.add(new MatrixState("错误: 主元过小, 矩阵奇异或接近奇异", aug.copy(), new int[]{i}));
+				return new DirectSolution(history, null);
+			}
+			// 消元
+			for (int j = i + 1; j < n; j++) {
+				double factor = aug.getEntry(j, i) / aug.getEntry(i, i);
+				if (Math.abs(factor) < EPSILON) continue;
+				RealVector rowI = aug.getRowVector(i).mapMultiply(factor);
+				RealVector rowJ = aug.getRowVector(j).subtract(rowI);
+				aug.setRowVector(j, rowJ);
+				String desc = String.format("行变换: R%d = R%d - (%.3f) * R%d", j + 1, j + 1, factor, i + 1);
+				history.add(new MatrixState(desc, aug.copy(), new int[]{i, j}));
+			}
+		}
+		history.add(new MatrixState("前向消元完成，形成上三角矩阵", aug.copy(), null));
+	\end{lstlisting}
+	
+	\subsubsection*{高斯消元法}
+	
+	\begin{lstlisting}[language=Java, caption={高斯消元法核心逻辑}, label={lst:dampedNewton-java}]
+		// 消元
+		for (int i = 0; i < n; i++) {
+			if (Math.abs(aug.getEntry(i, i)) < EPSILON) {
+				history.add(new MatrixState("错误: 主元 A(" + (i + 1) + "," + (i + 1) + ") 为零或过小，无法继续", aug.copy(), new int[]{i}));
+				return new DirectSolution(history, null); 
+			}
+			for (int j = i + 1; j < n; j++) {
+				double factor = aug.getEntry(j, i) / aug.getEntry(i, i);
+				if (Math.abs(factor) < EPSILON) continue; 
+				RealVector rowI = aug.getRowVector(i).mapMultiply(factor);
+				RealVector rowJ = aug.getRowVector(j).subtract(rowI);
+				aug.setRowVector(j, rowJ);
+				String desc = String.format("行变换: R%d = R%d - (%.3f) * R%d", j + 1, j + 1, factor, i + 1);
+				history.add(new MatrixState(desc, aug.copy(), new int[]{i, j}));
+			}
+		}
+		history.add(new MatrixState("前向消元完成，形成上三角矩阵", aug.copy(), null));
+	\end{lstlisting}
+	
+	
+	\newpage
+	\section{线性方程组的迭代解法完整代码}
+	\markboth{附录}{}
+	
+	
+	\subsubsection*{雅可比迭代法}
+	
+	\begin{lstlisting}[language=Java, caption={雅可比迭代法核心逻辑}, label={lst:dampedNewton-java}]
+		@Override
+		public VectorIterationState next() {
+			if (k == 0) {
+				k++;
+				return new VectorIterationState(0, x0.copy(), residualNorm);
+			}
+			
+			RealVector x_new = new ArrayRealVector(x.getDimension());
+			for (int i = 0; i < a.getRowDimension(); i++) {
+				double sigma = 0;
+				for (int j = 0; j < a.getColumnDimension(); j++) {
+					if (i != j) {
+						sigma += a.getEntry(i, j) * x.getEntry(j);
+					}
+				}
+				x_new.setEntry(i, (b.getEntry(i) - sigma) / a.getEntry(i, i));
+			}
+			x = x_new;
+			residualNorm = a.operate(x).subtract(b).getNorm();
+			return new VectorIterationState(k++, x.copy(), residualNorm);
+		}
+	\end{lstlisting}
+	
+	\newpage
+	
+	\subsubsection*{高斯-赛德尔迭代法}
+	
+	\begin{lstlisting}[language=Java, caption={高斯-赛德尔迭代法核心逻辑}, label={lst:dampedNewton-java}]
+		@Override
+		public VectorIterationState next() {
+			if (k == 0) {
+				k++;
+				return new VectorIterationState(0, x0.copy(), residualNorm);
+			}
+			
+			RealVector x_new = x.copy();
+			for (int i = 0; i < a.getRowDimension(); i++) {
+				double sigma1 = 0;
+				for (int j = 0; j < i; j++) {
+					sigma1 += a.getEntry(i, j) * x_new.getEntry(j);
+				}
+				
+				double sigma2 = 0;
+				for (int j = i + 1; j < a.getColumnDimension(); j++) {
+					sigma2 += a.getEntry(i, j) * x.getEntry(j);
+				}
+				
+				x_new.setEntry(i, (b.getEntry(i) - sigma1 - sigma2) / a.getEntry(i, i));
+			}
+			
+			x = x_new;
+			residualNorm = a.operate(x).subtract(b).getNorm();
+			
+			return new VectorIterationState(k++, x.copy(), residualNorm);
+		}
+	\end{lstlisting}
+	
+	\newpage
+	
+	\subsubsection*{松弛迭代法}
+	
+	\begin{lstlisting}[language=Java, caption={松弛迭代法核心逻辑}, label={lst:dampedNewton-java}]
+		@Override
+		public VectorIterationState next() {
+			if (k == 0) {
+				k++;
+				return new VectorIterationState(0, x0.copy(), residualNorm);
+			}
+			
+			RealVector x_old = x.copy();
+			
+			for (int i = 0; i < a.getRowDimension(); i++) {
+				double sigma1 = 0; 
+				for (int j = 0; j < i; j++) {
+					sigma1 += a.getEntry(i, j) * x.getEntry(j);
+				}
+				
+				double sigma2 = 0; 
+				for (int j = i + 1; j < a.getColumnDimension(); j++) {
+					sigma2 += a.getEntry(i, j) * x_old.getEntry(j);
+				}
+				
+				double gs_component = (b.getEntry(i) - sigma1 - sigma2) / a.getEntry(i, i);
+				
+				double new_xi = (1 - omega) * x_old.getEntry(i) + omega * gs_component;
+				x.setEntry(i, new_xi);
+			}
+			
+			residualNorm = a.operate(x).subtract(b).getNorm();
+			return new VectorIterationState(k++, x.copy(), residualNorm);
 		}
 	\end{lstlisting}
 	
